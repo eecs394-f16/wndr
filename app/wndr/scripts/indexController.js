@@ -16,7 +16,7 @@ angular
 
     //Map initialization  
     $scope.initMap = function() {
-        
+        document.getElementById('map_canvas').style.height = window.innerHeight + "px";
         var latlng = new google.maps.LatLng($scope.position.coords.latitude, $scope.position.coords.longitude);
         var myOptions = {
             zoom: 17,
