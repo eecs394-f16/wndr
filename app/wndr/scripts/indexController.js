@@ -1,29 +1,31 @@
 angular
   .module('wndr')
   .controller('indexController', function($scope, supersonic) {
-    
+
     var init = function () {
-      
+
         supersonic.device.geolocation.getPosition().then( function(position){
         $scope.position = position;
         supersonic.logger.debug (position);
         $scope.initMap();
       });
     };
-    
+
     $scope.markers = [];
     $scope.markerId = 1;
 
-    //Map initialization  
+    //Map initialization
     $scope.initMap = function() {
         document.getElementById('map_canvas').style.height = window.innerHeight + "px";
         var latlng = new google.maps.LatLng($scope.position.coords.latitude, $scope.position.coords.longitude);
         var myOptions = {
+            zoomControl: false,
+            mapTypeControl: false,
             zoom: 17,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        $scope.map = new google.maps.Map(document.getElementById("map_canvas"), myOptions); 
+        $scope.map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
         $scope.overlay = new google.maps.OverlayView();
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
@@ -34,7 +36,7 @@ angular
             anchor: new google.maps.Point(0, 0) // anchor
         };
         var marker = new google.maps.Marker({
-            
+
                             position: latlng,
                             icon: happyIcon,
                             map: $scope.map,
