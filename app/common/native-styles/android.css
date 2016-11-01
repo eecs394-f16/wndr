@@ -27,6 +27,9 @@ navigation-bar back-indicator {
   background-image: url(default_back_icon.png);
   background-size: 18;
 }
+#nav-newThought icon {
+  background-image: url(icons/new.svg);
+}
 
 navigation-bar back-button {
   color: #ffffff;

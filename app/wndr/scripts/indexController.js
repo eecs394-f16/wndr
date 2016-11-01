@@ -1,6 +1,22 @@
 angular
   .module('wndr')
   .controller('indexController', function($scope, supersonic) {
+    newListingBtn = new supersonic.ui.NavigationBarButton({
+      onTap: function() {
+
+        var view = new supersonic.ui.View("wndr#newThought");
+        supersonic.ui.layers.push(view);
+      },
+      styleId: "nav-newThought"
+    });
+
+    supersonic.ui.navigationBar.update({
+      title: "wndr",
+      overrideBackButton: false,
+      buttons: {
+        right: [newListingBtn]
+      }
+    }).then(supersonic.ui.navigationBar.show());
 
     var init = function () {
 
