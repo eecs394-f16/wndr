@@ -28,7 +28,7 @@ angular
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
         var happyIcon = {
-            url: "http://www.freeiconspng.com/uploads/emoji-png-9.png", // url
+            url: "/emojis/Upside-Down_Face_Emoji.png", // url
             scaledSize: new google.maps.Size(30, 30), // scaled size
             origin: new google.maps.Point(0,0), // origin
             anchor: new google.maps.Point(0, 0) // anchor
