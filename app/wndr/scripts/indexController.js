@@ -11,7 +11,7 @@ angular
 
       var icons = {
           poop: {
-              url: "emojis/Poop_Emoji.png",
+              url: "/emojis/Poop_Emoji.png",
               scaledSize: new google.maps.Size(30, 30), // scaled size
               origin: new google.maps.Point(0, 0), // origin
               anchor: new google.maps.Point(0, 0) // anchor
@@ -76,7 +76,7 @@ angular
         $scope.overlay.setMap($scope.map);
         var marker = new google.maps.Marker({
                             position: latlng,
-                            icon: icons['upside_down'],
+                            icon: icons['poop'],
                             map: $scope.map,
                             animation: google.maps.Animation.DROP
         });
