@@ -71,15 +71,17 @@ angular
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+        
         $scope.map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
         $scope.overlay = new google.maps.OverlayView();
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
-        addMarker(latlng, icons.poop, $scope.map, google.maps.Animation.DROP);
-
+        
+        var marker = addMarker(latlng, icons.poop, $scope.map, google.maps.Animation.DROP);
         marker.addListener('click', function () {
             alert('this is your location!');
         });
+        
          firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
             for (var thought in snapshot.val()) {
                 
