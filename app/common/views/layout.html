@@ -17,6 +17,18 @@
   <script src="/components/supersonic/supersonic.js"></script>
   <script src="/components/webcomponentsjs/webcomponents-lite.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+    <script>
+  var config = {
+    apiKey: "AIzaSyCeppmLzwUNuPJTmH8wEySWb16YjdT2vik",
+    authDomain: "wndr-3897e.firebaseapp.com",
+    databaseURL: "https://wndr-3897e.firebaseio.com",
+    storageBucket: "wndr-3897e.appspot.com",
+    messagingSenderId: "754821687927"
+  };
+  firebase.initializeApp(config);
+    </script>
+
   <% _.each(yield.modules, function(module) { %>
   <script src="/app/<%= module %>.js"></script>
   <% }); %>
