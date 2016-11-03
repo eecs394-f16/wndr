@@ -22,3 +22,7 @@ module.exports =
   statusBar:
     enabled: true
     style: "default"
+    
+  addons:
+    facebook:
+      enabled: true

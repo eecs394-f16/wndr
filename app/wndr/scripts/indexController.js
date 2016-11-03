@@ -3,14 +3,6 @@ angular
   .controller('indexController', function ($scope, supersonic) {
         
     $scope.markers = [];
-    $scope.markerId = 1;
-    
-    var thoughtBubble = {
-        thought: 'your thought here',
-        sender: 'nobody',
-        lat: 42.051649,
-        lng: -87.6772423
-    };
 
     var icons = {
          grinning: {
@@ -30,8 +22,36 @@ angular
              scaledSize: new google.maps.Size(30, 30), // scaled size
              origin: new google.maps.Point(0, 0), // origin
              anchor: new google.maps.Point(0, 0) // anchor
+         },
+         OMG: {
+             url: "/emojis/OMG_Face_Emoji.png", // url
+             scaledSize: new google.maps.Size(30, 30), // scaled size
+             origin: new google.maps.Point(0, 0), // origin
+             anchor: new google.maps.Point(0, 0) // anchor
          }
      };
+     
+     var mapIcon = function (iconName) {
+        
+        switch (iconName) {
+            case 'grinning':
+                return icons.grinning;
+            case 'poop' :
+                return icons.poop;
+            case 'upside_down':
+                return icons.upside_down;
+            case 'OMG':
+                return icons.OMG;
+            default:
+                return icons.upside_down;
+        }
+     };
+    //var thoughtBubble = {
+    //    thought: 'EECS394 was fun!',
+    //    sender: 'Daniel',
+    //    lat: 42.051649,
+    //    lng: -87.6772423
+    //};
 
     newListingBtn = new supersonic.ui.NavigationBarButton({
       onTap: function() {
@@ -77,18 +97,20 @@ angular
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
         
-        var marker = addMarker(latlng, icons.poop, $scope.map, google.maps.Animation.DROP);
-        marker.addListener('click', function () {
-            alert('this is your location!');
-        });
+        addMarker(latlng, icons.poop, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
         
-         firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
+        firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
             for (var thought in snapshot.val()) {
-                
+                     
                 var latlng = new google.maps.LatLng(snapshot.val()[thought].lat, snapshot.val()[thought].lng);
-                addMarker(latlng, icons.upside_down, $scope.map, google.maps.Animation.DROP);
+                addMarker(latlng,
+                          mapIcon(snapshot.val()[thought].icon),
+                          $scope.map,
+                          google.maps.Animation.DROP,snapshot.val()[thought].thought,
+                          snapshot.val()[thought].sender);
             }
         });
+        
         //addToFirebase(thoughtBubble);
     };
     google.maps.event.addDomListener(window, 'load', init);
@@ -104,13 +126,22 @@ angular
         });
     }
     
-    function addMarker(latlng, icon, map , animation) {
+    function addMarker(latlng, icon, map , animation, thoughts, sender) {
         
-        return new google.maps.Marker({
-                            position: latlng,
-                            icon: icon,
-                            map: map,
-                            animation: animation
-        });
+        var options = {
+                        message: thoughts,
+                        buttonLabel: "Close"
+                      };
+
+        var result = new google.maps.Marker({
+                        position: latlng,
+                        icon: icon,
+                        map: map,
+                        animation: animation
+                        }).addListener('click', function () {
+                        supersonic.ui.dialog.alert(sender, options);
+                        });
+        $scope.markers.push(result);
+        return result;
     }
 });
