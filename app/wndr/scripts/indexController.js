@@ -127,19 +127,24 @@ angular
     }
     
     function addMarker(latlng, icon, map , animation, thoughts, sender) {
-        
-        var options = {
-                        message: thoughts,
-                        buttonLabel: "Close"
-                      };
+                      
+        var contentString = '<div id="content">'+
+                            '<h3>'+sender+'</h3>'+
+                            '<p>'+thoughts+
+                            '</p>'+
+                            '</div>';
 
+                      
+        var infowindow = new google.maps.InfoWindow({
+                           content: contentString
+                          });
         var result = new google.maps.Marker({
                         position: latlng,
                         icon: icon,
                         map: map,
                         animation: animation
                         }).addListener('click', function () {
-                        supersonic.ui.dialog.alert(sender, options);
+                          infowindow.open(map,this);
                         });
         $scope.markers.push(result);
         return result;
