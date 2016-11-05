@@ -5,11 +5,23 @@ module.exports =
   # See styling options for tabs and other native components in app/common/native-styles/ios.css or app/common/native-styles/android.css
 
 
-   rootView:
-     title: "Index"
-     id: "index"
-     location: "wndr#index" 
+   #rootView:
+   #  title: "Index"
+   #  id: "index"
+   #  location: "wndr#index" 
 
+  tabs: [
+    {
+      title: "Home"
+      id: "index"
+      location: "wndr#index"
+    }
+    {
+      title: "My Profile"
+      id: "person"
+      location: "example#learn-more"
+    }
+  ]
   preloads: [
     {
       id: "learn-more"

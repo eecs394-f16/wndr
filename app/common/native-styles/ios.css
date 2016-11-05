@@ -48,3 +48,7 @@ tab-bar-item#index {
 tab-bar-item#internet {
   background-image: url(icons/search.svg);
 }
+
+tab-bar-item#person {
+  background-image: url(icons/person.svg);
+}
