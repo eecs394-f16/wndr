@@ -1,5 +1,20 @@
 <super-navbar>
   <super-navbar-title>
-    wndr
+    New Thought
   </super-navbar-title>
 </super-navbar>
+<div ng-controller="newThoughtController"  ng-attr-location="wndr#newThought">
+  <form novalidate ng-submit="getInput()">
+    <textarea id="TextArea" ng-model="thought" ng-keyup="autoExpand($event)" placeholder="Enter your thoughts here.">
+    </textarea>
+  </form>
+    <label class="item item-input item-select">
+    <div class="input-label">
+      How are you feeling?<i class="em em-grinning"></i>
+    </div>
+    <select>
+      <option >Green</option>
+      <option>Red</option>
+    </select>
+  </label>
+</div>
