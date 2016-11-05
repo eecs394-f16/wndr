@@ -50,6 +50,18 @@ angular
              scaledSize: new google.maps.Size(30, 30), // scaled size
              origin: new google.maps.Point(0, 0), // origin
              anchor: new google.maps.Point(0, 0) // anchor
+         },
+         unamused: {
+             url: "/emojis/Unamused_Face_Emoji.png",
+             scaledSize: new google.maps.Size(30, 30),
+             origin: new google.maps.Point(0, 0),
+             anchor: new google.maps.Point(0, 0)
+         },
+         red_flag: {
+             url: "/emojis/Red_Flag_Emoji.png",
+             scaledSize: new google.maps.Size(30, 30),
+             origin: new google.maps.Point(0, 0),
+             anchor: new google.maps.Point(0, 0)
          }
      };
      
@@ -64,6 +76,10 @@ angular
                 return icons.upside_down;
             case 'OMG':
                 return icons.OMG;
+            case 'unamused':
+                return icons.unamused;
+            case 'red_flag':
+                return icons.red_flag;
             default:
                 return icons.upside_down;
         }
@@ -86,9 +102,9 @@ angular
     supersonic.ui.navigationBar.update({
       title: "wndr",
       overrideBackButton: false,
-      buttons: {
-        right: [newListingBtn]
-      }
+      //buttons: {
+      //  right: [newListingBtn]
+      //}
     }).then(supersonic.ui.navigationBar.show());
 
     //view initialization
@@ -109,7 +125,7 @@ angular
         var myOptions = {
             zoomControl: false,
             mapTypeControl: false,
-            zoom: 17,
+            zoom: 18,
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
@@ -119,7 +135,7 @@ angular
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
         
-        addMarker(latlng, icons.poop, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
+        addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
         
         firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
             for (var thought in snapshot.val()) {
