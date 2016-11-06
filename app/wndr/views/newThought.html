@@ -4,17 +4,56 @@
   </super-navbar-title>
 </super-navbar>
 <div ng-controller="newThoughtController"  ng-attr-location="wndr#newThought">
-  <form novalidate ng-submit="getInput()">
-    <textarea id="TextArea" ng-model="thought" ng-keyup="autoExpand($event)" placeholder="Enter your thoughts here.">
-    </textarea>
-  </form>
-    <label class="item item-input item-select">
-    <div class="input-label">
-      How are you feeling?<i class="em em-grinning"></i>
-    </div>
-    <select>
-      <option >Green</option>
-      <option>Red</option>
-    </select>
-  </label>
+  <div class="row row-center">
+  <div class="col col-offset-10 col-80">
+    <form novalidate ng-submit="getInput()">
+      <ul>
+        <li ng-click="setIcon($event, 'grinning')">
+          <i class="em em-grin selection"></i>
+        </li>
+        <li ng-click="setIcon($event, 'OMG')">
+          <i class="em em-scream selection"></i>
+        </li>
+        <li ng-click="setIcon($event, 'angry')">
+          <i class="em em-angry selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-fearful selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+        <li>
+          <i class="em em-blush selection"></i>
+        </li>
+      </ul>
+      <br />
+      <textarea id="TextArea" ng-model="thought" ng-keyup="autoExpand($event)" placeholder="Enter your thoughts here.">
+      </textarea>
+      <br />
+      <input class="submitButton" type="submit" id="submit" value="Share" />
+    </form>
+  </div>
+  </div>
 </div>

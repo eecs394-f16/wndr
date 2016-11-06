@@ -64,6 +64,7 @@ angular
              anchor: new google.maps.Point(0, 0)
          }
      };
+    localStorage.setItem('icons', icons);
      
      var mapIcon = function (iconName) {
         
@@ -84,12 +85,6 @@ angular
                 return icons.upside_down;
         }
      };
-    //var thoughtBubble = {
-    //    thought: 'EECS394 was fun!',
-    //    sender: 'Daniel',
-    //    lat: 42.051649,
-    //    lng: -87.6772423
-    //};
 
     newListingBtn = new supersonic.ui.NavigationBarButton({
       onTap: function() {
@@ -144,25 +139,13 @@ angular
                 addMarker(latlng,
                           mapIcon(snapshot.val()[thought].icon),
                           $scope.map,
-                          google.maps.Animation.DROP,snapshot.val()[thought].thought,
+                          google.maps.Animation.DROP,
+                          snapshot.val()[thought].thought,
                           snapshot.val()[thought].sender);
             }
         });
-        
-        //addToFirebase(thoughtBubble);
     };
     google.maps.event.addDomListener(window, 'load', init);
-
-    function addToFirebase(thoughtBubble) {
-        var newKey = firebase.database().ref().child('thoughts').push().key;
-        var updates = {};
-        updates['/thoughts/' + newKey] = thoughtBubble;
-        firebase.database().ref().update(updates, function (err) {
-            if (err) {
-                alert('oh no! the database was not updated!');
-            }
-        });
-    }
     
     function addMarker(latlng, icon, map , animation, thoughts, sender) {
                       
@@ -187,4 +170,14 @@ angular
         $scope.markers.push(result);
         return result;
     }
+    
+    supersonic.data.channel('addMarker').subscribe( function(thoughtBubble) {
+      var latlng = new google.maps.LatLng(thoughtBubble.lat, thoughtBubble.lng);
+      addMarker(latlng,
+                mapIcon(thoughtBubble.icon),
+                $scope.map,
+                google.maps.Animation.DROP,
+                thoughtBubble.thought,
+                thoughtBubble.sender);
+    });
 });

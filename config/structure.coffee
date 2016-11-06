@@ -17,9 +17,9 @@ module.exports =
       location: "wndr#index"
     }
     {
-      title: "My Profile"
-      id: "person"
-      location: "example#learn-more"
+      title: "Share"
+      id: "newThought"
+      location: "wndr#newThought"
     }
   ]
   preloads: [
