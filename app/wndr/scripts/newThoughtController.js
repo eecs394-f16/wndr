@@ -2,8 +2,15 @@ angular
   .module('wndr')
   .controller('newThoughtController', function ($scope, supersonic) {
     
-    $scope.iconName = "";
-    $scope.selected = undefined;
+    function init() {
+      $scope.iconName = "";
+      $scope.selected = undefined;
+      $scope.thought = "";
+    }
+        
+    supersonic.ui.views.current.whenVisible(function(){
+      init();
+    });
     
     $scope.autoExpand = function(e) {
       var element = typeof e === 'object' ? e.target : document.getElementById(e);
@@ -14,6 +21,11 @@ angular
    $scope.getInput = function() {
 
       document.activeElement.blur();
+      if ($scope.iconName === "") {
+        supersonic.ui.dialog.alert("Please select an Icon!");
+        return;
+      }
+      $scope.selected.removeClass('selected');
       supersonic.device.geolocation.getPosition().then( function(position){
         $scope.position = position;
       });
@@ -27,6 +39,7 @@ angular
       supersonic.logger.debug($scope.iconName);
       addToFirebase(thoughtBubble);
       supersonic.data.channel('addMarker').publish(thoughtBubble);
+      init();
       supersonic.ui.tabs.select(0);
     };
     

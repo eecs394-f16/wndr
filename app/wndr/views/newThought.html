@@ -8,47 +8,31 @@
   <div class="col col-offset-10 col-80">
     <form novalidate ng-submit="getInput()">
       <ul>
-        <li ng-click="setIcon($event, 'grinning')">
-          <i class="em em-grin selection"></i>
+        <li ng-click="setIcon($event, 'smiling')">
+          <span class="unicodeChar">&#x1f603</span>
         </li>
-        <li ng-click="setIcon($event, 'OMG')">
-          <i class="em em-scream selection"></i>
+        <li ng-click="setIcon($event, 'thinking')">
+          <span class="unicodeChar">&#x1f914</span>
+        </li>
+        <li ng-click="setIcon($event, 'happyTears')">
+          <span class="unicodeChar">&#x1f602</span>
+        </li>
+        <li ng-click="setIcon($event, 'tongueOut')">
+          <span class="unicodeChar">&#x1f61c</span>
+        </li>
+        <li ng-click="setIcon($event, 'sad')">
+          <span class="unicodeChar">&#x2639&#xfe0f</span>
         </li>
         <li ng-click="setIcon($event, 'angry')">
-          <i class="em em-angry selection"></i>
+          <span class="unicodeChar">	&#x1f621</span>
         </li>
-        <li>
-          <i class="em em-blush selection"></i>
+        <li >
+          <span class="unicodeChar">&#x2764</span>
         </li>
-        <li>
-          <i class="em em-fearful selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
-        </li>
-        <li>
-          <i class="em em-blush selection"></i>
+        <li ng-click="setIcon($event, 'poop')">
+          <span class="unicodeChar">&#x1f4a9</span>
         </li>
       </ul>
-      <br />
       <textarea id="TextArea" ng-model="thought" ng-keyup="autoExpand($event)" placeholder="Enter your thoughts here.">
       </textarea>
       <br />
