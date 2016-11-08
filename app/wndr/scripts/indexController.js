@@ -27,6 +27,12 @@ angular
     };
 
     var icons = {
+        heart: {
+          url: "/emojis/heavy-black-heart.png",
+          scaledSize: new google.maps.Size(30, 30), // scaled size
+          origin: new google.maps.Point(0, 0), // origin
+          anchor: new google.maps.Point(0, 0)
+        },
         angry: {
           url: "/emojis/Very_Angry_Emoji.png",
           scaledSize: new google.maps.Size(30, 30), // scaled size
@@ -105,6 +111,8 @@ angular
      var mapIcon = function (iconName) {
         
         switch (iconName) {
+          case 'heart' :
+            return icons.heart;
           case 'angry':
             return icons.angry;
           case'sad' :
