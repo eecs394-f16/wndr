@@ -3,6 +3,7 @@ angular
   .controller('indexController', function ($scope, supersonic) {
         
     $scope.markers = [];
+    $scope.currentPosition = undefined;
     var provider = new firebase.auth.FacebookAuthProvider();
     $scope.FBLogin = function() {
       
@@ -141,7 +142,7 @@ angular
               return icons.upside_down;
         }
      };
-
+    
     newListingBtn = new supersonic.ui.NavigationBarButton({
       onTap: function() {
         var view = new supersonic.ui.View("wndr#newThought");
@@ -149,7 +150,7 @@ angular
       },
       styleId: "nav-newThought"
     });
-
+    
     supersonic.ui.navigationBar.update({
       title: "wndr",
       overrideBackButton: false,
@@ -170,6 +171,7 @@ angular
     //Map initialization
     $scope.initMap = function() {
 
+        $scope.ib = new google.maps.InfoWindow();
         document.getElementById('map_canvas').style.height = window.innerHeight + "px";
         var latlng = new google.maps.LatLng($scope.position.coords.latitude, $scope.position.coords.longitude);
         
@@ -186,7 +188,7 @@ angular
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
         
-        addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
+        $scope.currentPosition = addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
         
         firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
             for (var thought in snapshot.val()) {
@@ -209,19 +211,24 @@ angular
                             '<h3>'+sender+'</h3>'+
                             '<p>'+thoughts+
                             '</p>'+
+                            '<button class="addComment" ng-click="">Comment</button>'+
                             '</div>';
 
                       
-        var infowindow = new google.maps.InfoWindow({
-                           content: contentString
-                          });
+        var options = {
+                        content: contentString,
+                        disableAutoPan : true
+                      };
         var result = new google.maps.Marker({
                         position: latlng,
                         icon: icon,
                         map: map,
                         animation: animation
                         }).addListener('click', function () {
-                          infowindow.open(map,this);
+                          $scope.ib.close();
+                          $scope.ib.setOptions(options);
+                          $scope.ib.open(map,this);
+                          map.panTo(latlng);
                         });
         $scope.markers.push(result);
         return result;
