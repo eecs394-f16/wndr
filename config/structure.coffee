@@ -23,14 +23,7 @@ module.exports =
     }
   ]
   preloads: [
-    {
-      id: "learn-more"
-      location: "example#learn-more"
-    }
-    {
-      id: "using-the-scanner"
-      location: "example#using-the-scanner"
-    }
+    
   ]
 
   # drawers:

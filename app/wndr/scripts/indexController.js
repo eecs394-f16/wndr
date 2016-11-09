@@ -1,6 +1,6 @@
 angular
   .module('wndr')
-  .controller('indexController', function ($scope, supersonic) {
+  .controller('indexController', function ($scope, supersonic, $compile) {
         
     $scope.markers = [];
     $scope.currentPosition = undefined;
@@ -199,24 +199,96 @@ angular
                           $scope.map,
                           google.maps.Animation.DROP,
                           snapshot.val()[thought].thought,
-                          snapshot.val()[thought].sender);
+                          snapshot.val()[thought].sender,
+                          thought);
             }
         });
     };
     google.maps.event.addDomListener(window, 'load', init);
     
-    function addMarker(latlng, icon, map , animation, thoughts, sender) {
-                      
+    function showComments(key){
+      var ref = "/thoughts/" + key +"/comments/";
+       firebase.database().ref(ref).once('value').then(function (snapshot) {
+          var commentElement = document.getElementById('comments');
+          var html = "";
+            for (var comment in snapshot.val()) {
+                html = html + '<div class="comment">'+snapshot.val()[comment].text+'</div>';
+            }
+          commentElement.innerHTML = html;
+        });
+    }
+    
+    $scope.addComment = function (key){
+      var dropdown = angular.element(document.getElementById('dropdownToggle'));
+      var input = angular.element(document.getElementById('newComment'));
+      input.removeClass('hidden');
+      input.addClass("comment");
+      if ( dropdown.hasClass('fa-caret-down')) {
+        dropdown.removeClass('fa-caret-down');
+        }
+      if (!dropdown.hasClass('fa-caret-up')) {
+        dropdown.addClass('fa-caret-up');
+      }
+      showComments(key);
+    };
+    
+    $scope.submitComment = function (key){
+      document.activeElement.blur();
+      var commentElement = document.getElementById('comments');
+      commentElement.innerHTML = commentElement.innerHTML + '<div class="comment">'+$scope.commentInput+'</div>';
+      postComment($scope.commentInput, key);
+      $scope.commentInput = "";
+    };
+    
+    function postComment(inputText, key) {
+      var input = {
+        text: inputText
+      };
+      var ref = "/thoughts/" + key +"/comments/";
+      var newKey = firebase.database().ref(ref).push().key;
+      var updates = {};
+      updates[ref + newKey] = input;
+      firebase.database().ref().update(updates, function (err) {
+          if (err) {
+              alert('oh no! the database was not updated!');
+          }
+      });
+    }
+    
+    $scope.dropdown = function ($event, key){
+      var el = angular.element($event.currentTarget);
+      if (el.hasClass( "fa-caret-down")) {
+        el.removeClass('fa-caret-down');
+        el.addClass('fa-caret-up');
+        showComments(key);
+      } else {
+        el.removeClass('fa-caret-up');
+        el.addClass('fa-caret-down');
+        var input = angular.element(document.getElementById('newComment'));
+        if (input.hasClass('comment')) {
+          input.removeClass('comment');
+          input.addClass("hidden");
+        }
+        document.getElementById('comments').innerHTML = "";
+      }
+    };
+    
+    function addMarker(latlng, icon, map , animation, thoughts, sender, key) {
+                        
         var contentString = '<div id="content">'+
                             '<h3>'+sender+'</h3>'+
                             '<p>'+thoughts+
                             '</p>'+
-                            '<button class="addComment" ng-click="">Comment</button>'+
+                            '<div id="comments"></div>'+
+                            '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment" class="hidden" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
+                            '<button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
+                            '<span><i id="dropdownToggle" class="inline fa fa-caret-down" ng-click="dropdown($event,'+"'"+key+"'"+')"></i></span>'+
                             '</div>';
-
+                            
+        var compiled = $compile(contentString)($scope);
                       
         var options = {
-                        content: contentString,
+                        content: compiled[0],
                         disableAutoPan : true
                       };
         var result = new google.maps.Marker({
@@ -241,6 +313,7 @@ angular
                 $scope.map,
                 google.maps.Animation.DROP,
                 thoughtBubble.thought,
-                thoughtBubble.sender);
+                thoughtBubble.sender,
+                thoughtBubble.key);
     });
 });

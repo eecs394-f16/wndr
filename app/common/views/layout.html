@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/app/common/stylesheets/application.css" />
   <link rel="stylesheet" href="emoji.min.css">
   <link rel="import" href="/components/supersonic/components/import.html">
-  <link href="http://emojicss.com/emoji.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 
   <script src="http://localhost/cordova.js"></script>
   <script src="http://maps.google.com/maps/api/js?key=AIzaSyACasFJhGHXYCoC5BxVmdyF-8RMf706in0"></script>
@@ -19,8 +19,8 @@
   <script src="/components/supersonic/supersonic.js"></script>
   <script src="/components/webcomponentsjs/webcomponents-lite.js"></script>
 
-    <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
-    <script>
+  <script src="https://www.gstatic.com/firebasejs/3.5.3/firebase.js"></script>
+  <script>
   var config = {
     apiKey: "AIzaSyCeppmLzwUNuPJTmH8wEySWb16YjdT2vik",
     authDomain: "wndr-3897e.firebaseapp.com",
@@ -29,7 +29,7 @@
     messagingSenderId: "754821687927"
   };
   firebase.initializeApp(config);
-    </script>
+  </script>
 
   <% _.each(yield.modules, function(module) { %>
   <script src="/app/<%= module %>.js"></script>

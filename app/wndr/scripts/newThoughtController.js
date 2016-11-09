@@ -28,19 +28,18 @@ angular
       $scope.selected.removeClass('selected');
       supersonic.device.geolocation.getPosition().then( function(position){
         $scope.position = position;
-      });
-      var thoughtBubble = {
+        var thoughtBubble = {
         thought: $scope.thought,
         sender: 'Test',
         icon: $scope.iconName,
         lat: $scope.position.coords.latitude,
-        lng: $scope.position.coords.longitude
-      };
-      supersonic.logger.debug($scope.iconName);
-      addToFirebase(thoughtBubble);
-      supersonic.data.channel('addMarker').publish(thoughtBubble);
-      init();
-      supersonic.ui.tabs.select(0);
+        lng: $scope.position.coords.longitude,
+        };
+        thoughtBubble = addToFirebase(thoughtBubble);
+        supersonic.data.channel('addMarker').publish(thoughtBubble);
+        init();
+        supersonic.ui.tabs.select(0);
+      });
     };
     
     $scope.setIcon = function($event, icon) {
@@ -64,10 +63,12 @@ angular
     var newKey = firebase.database().ref().child('thoughts').push().key;
     var updates = {};
     updates['/thoughts/' + newKey] = thoughtBubble;
+    thoughtBubble.key = newKey;
     firebase.database().ref().update(updates, function (err) {
         if (err) {
             alert('oh no! the database was not updated!');
         }
     });
+    return thoughtBubble;
     }
   });
