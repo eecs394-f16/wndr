@@ -281,8 +281,8 @@ angular
                             '</p>'+
                             '<div id="comments"></div>'+
                             '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment" class="hidden" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
-                            '<button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
-                            '<span><i id="dropdownToggle" class="inline fa fa-caret-down" ng-click="dropdown($event,'+"'"+key+"'"+')"></i></span>'+
+                            '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
+                            '<span><i style="font-size: 36px;" id="dropdownToggle" class="expandButton fa fa-caret-down" ng-click="dropdown($event,' + "'" + key + "'" + ')"></i></span></div>' +
                             '</div>';
                             
         var compiled = $compile(contentString)($scope);
