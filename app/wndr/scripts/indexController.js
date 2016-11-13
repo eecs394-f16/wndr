@@ -1,12 +1,12 @@
 angular
   .module('wndr')
-  .controller('indexController', function ($scope, supersonic, $compile) {
-        
+  .controller('indexController', function ($scope, supersonic, $compile,$window) {
+
     $scope.markers = [];
     $scope.currentPosition = undefined;
     var provider = new firebase.auth.FacebookAuthProvider();
     $scope.FBLogin = function() {
-      
+
       firebase.auth().signInWithPopup(provider).then(function(result) {
         // This gives you a Facebook Access Token. You can use it to access the Facebook API.
         var token = result.credential.accessToken;
@@ -108,9 +108,9 @@ angular
          }
      };
     localStorage.setItem('icons', icons);
-     
+
      var mapIcon = function (iconName) {
-        
+
         switch (iconName) {
           case 'heart' :
             return icons.heart;
@@ -142,7 +142,7 @@ angular
               return icons.upside_down;
         }
      };
-    
+
     newListingBtn = new supersonic.ui.NavigationBarButton({
       onTap: function() {
         var view = new supersonic.ui.View("wndr#newThought");
@@ -150,7 +150,7 @@ angular
       },
       styleId: "nav-newThought"
     });
-    
+
     supersonic.ui.navigationBar.update({
       title: "wndr",
       overrideBackButton: false,
@@ -174,7 +174,7 @@ angular
         $scope.ib = new google.maps.InfoWindow();
         document.getElementById('map_canvas').style.height = window.innerHeight + "px";
         var latlng = new google.maps.LatLng($scope.position.coords.latitude, $scope.position.coords.longitude);
-        
+
         var myOptions = {
             zoomControl: false,
             mapTypeControl: false,
@@ -182,17 +182,17 @@ angular
             center: latlng,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-        
+
         $scope.map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
         $scope.overlay = new google.maps.OverlayView();
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
-        
+
         $scope.currentPosition = addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
-        
+
         firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
             for (var thought in snapshot.val()) {
-                     
+
                 var latlng = new google.maps.LatLng(snapshot.val()[thought].lat, snapshot.val()[thought].lng);
                 addMarker(latlng,
                           mapIcon(snapshot.val()[thought].icon),
@@ -205,7 +205,7 @@ angular
         });
     };
     google.maps.event.addDomListener(window, 'load', init);
-    
+
     function showComments(key){
       var ref = "/thoughts/" + key +"/comments/";
        firebase.database().ref(ref).once('value').then(function (snapshot) {
@@ -217,7 +217,7 @@ angular
           commentElement.innerHTML = html;
         });
     }
-    
+
     $scope.addComment = function (key){
       var dropdown = angular.element(document.getElementById('dropdownToggle'));
       var input = angular.element(document.getElementById('newComment'));
@@ -230,8 +230,12 @@ angular
         dropdown.addClass('fa-caret-up');
       }
       showComments(key);
+      var element = $window.document.getElementById('newComment');
+        if(element)
+          element.focus();
+
     };
-    
+
     $scope.submitComment = function (key){
       document.activeElement.blur();
       var commentElement = document.getElementById('comments');
@@ -239,7 +243,7 @@ angular
       postComment($scope.commentInput, key);
       $scope.commentInput = "";
     };
-    
+
     function postComment(inputText, key) {
       var input = {
         text: inputText
@@ -254,7 +258,7 @@ angular
           }
       });
     }
-    
+
     $scope.dropdown = function ($event, key){
       var el = angular.element($event.currentTarget);
       if (el.hasClass( "fa-caret-down")) {
@@ -272,9 +276,9 @@ angular
         document.getElementById('comments').innerHTML = "";
       }
     };
-    
+
     function addMarker(latlng, icon, map , animation, thoughts, sender, key) {
-                        
+
         var contentString = '<div id="content">'+
                             '<h3>'+sender+'</h3>'+
                             '<p>'+thoughts+
@@ -284,9 +288,9 @@ angular
                             '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
                             '<span><i style="font-size: 36px;" id="dropdownToggle" class="expandButton fa fa-caret-down" ng-click="dropdown($event,' + "'" + key + "'" + ')"></i></span></div>' +
                             '</div>';
-                            
+
         var compiled = $compile(contentString)($scope);
-                      
+
         var options = {
                         content: compiled[0],
                         disableAutoPan : true
@@ -305,7 +309,7 @@ angular
         $scope.markers.push(result);
         return result;
     }
-    
+
     supersonic.data.channel('addMarker').subscribe( function(thoughtBubble) {
       var latlng = new google.maps.LatLng(thoughtBubble.lat, thoughtBubble.lng);
       addMarker(latlng,
