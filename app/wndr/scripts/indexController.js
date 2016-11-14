@@ -143,19 +143,7 @@ angular
               return icons.upside_down;
         }
      };
-<<<<<<< HEAD
-    
-=======
 
-    newListingBtn = new supersonic.ui.NavigationBarButton({
-      onTap: function() {
-        var view = new supersonic.ui.View("wndr#newThought");
-        supersonic.ui.layers.push(view);
-      },
-      styleId: "nav-newThought"
-    });
-
->>>>>>> origin/master
     supersonic.ui.navigationBar.update({
       title: "wndr",
       overrideBackButton: false,
@@ -192,14 +180,9 @@ angular
         $scope.overlay = new google.maps.OverlayView();
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
-<<<<<<< HEAD
         $scope.map.addListener('click', function() {
           $scope.ib.close();
         });
-        
-=======
-
->>>>>>> origin/master
         $scope.currentPosition = addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
 
         firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
