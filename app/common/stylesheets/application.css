@@ -15,15 +15,24 @@ textarea {
   z-index: 10;
 }
 
-ul { 
-  width: 100%;
+#emojiContainer{
+  text-align: center;
+  padding-bottom: 5px;
+}
+#emojiContainer li {
+  /*change this for the iPhone it here*/
+  display: inline-block;
+  font-size: 3em;
   height: 40px;
-  overflow-x: scroll;
-  white-space:nowrap;
+  white-space: nowrap;
 }
 
-li { 
-  display: inline-block
+@media screen and (min-width: 480px) {
+  #emojiContainer li {
+    font-size: 40px;
+    height: 45px;
+    padding-top: 12px;
+  }
 }
 
 .submitButton{
@@ -48,10 +57,6 @@ li {
 
 .selected {
   background-color: #D3D3D3
-}
-
-.unicodeChar {
-  font-size: 4em;
 }
 
 .comment{
