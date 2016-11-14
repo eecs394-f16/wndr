@@ -4,6 +4,7 @@ angular
         
     $scope.markers = [];
     $scope.currentPosition = undefined;
+    $scope.commentInput = "";
     var provider = new firebase.auth.FacebookAuthProvider();
     $scope.FBLogin = function() {
       
@@ -143,14 +144,6 @@ angular
         }
      };
     
-    newListingBtn = new supersonic.ui.NavigationBarButton({
-      onTap: function() {
-        var view = new supersonic.ui.View("wndr#newThought");
-        supersonic.ui.layers.push(view);
-      },
-      styleId: "nav-newThought"
-    });
-    
     supersonic.ui.navigationBar.update({
       title: "wndr",
       overrideBackButton: false,
@@ -187,6 +180,9 @@ angular
         $scope.overlay = new google.maps.OverlayView();
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
+        $scope.map.addListener('click', function() {
+          $scope.ib.close();
+        });
         
         $scope.currentPosition = addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
         
@@ -298,6 +294,7 @@ angular
                         animation: animation
                         }).addListener('click', function () {
                           $scope.ib.close();
+                          $scope.commentInput = "";
                           $scope.ib.setOptions(options);
                           $scope.ib.open(map,this);
                           map.panTo(latlng);
@@ -315,5 +312,13 @@ angular
                 thoughtBubble.thought,
                 thoughtBubble.sender,
                 thoughtBubble.key);
+    });
+    
+    steroids.tabBar.on('didchange', function() {
+      supersonic.device.geolocation.getPosition().then( function(position){
+        var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
+        $scope.map.panTo(LatLng);
+        $scope.currentPosition.setPosition(LatLng);
+      });
     });
 });
