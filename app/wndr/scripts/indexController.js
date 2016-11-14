@@ -5,28 +5,6 @@ angular
     $scope.markers = [];
     $scope.currentPosition = undefined;
     $scope.commentInput = "";
-    var provider = new firebase.auth.FacebookAuthProvider();
-    $scope.FBLogin = function() {
-
-      firebase.auth().signInWithPopup(provider).then(function(result) {
-        // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-        //var token = result.credential.accessToken;
-        // The signed-in user info.
-        var user = result.user;
-        localStorage.setItem('username', user.displayName.split(" ")[0]);
-        // ...
-      }).catch(function(error) {
-        // Handle Errors here.
-        //var errorCode = error.code;
-        var errorMessage = error.message;
-        alert (errorMessage);
-        // The email of the user's account used.
-        //var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        //var credential = error.credential;
-        // ...
-      });
-    };
 
     var icons = {
         heart: {
@@ -155,14 +133,6 @@ angular
     //view initialization
     var init = function () {
 
-        firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        localStorage.setItem('username', user.displayName.split(" ")[0]);
-      } else {
-        // No user is signed in.
-        FBLogin();
-      }
-    });
         supersonic.device.geolocation.getPosition().then( function(position){
         $scope.position = position;
         $scope.initMap();
@@ -208,6 +178,7 @@ angular
                           google.maps.Animation.DROP,
                           snapshot.val()[thought].thought,
                           snapshot.val()[thought].sender,
+                          snapshot.val()[thought].likers,
                           thought,
                           likes);
             }
@@ -290,23 +261,39 @@ angular
       
       var like = document.getElementById('likes');
       var icon = angular.element(document.getElementById('likeIcon'));
-      if (icon.hasClass('selected')) {
+      like.innerHTML = likes + 1;
+      if (icon.hasClass('fa-heart')) {
         return;
       }
-      like.innerHTML = likes + 1;
-      icon.addClass('selected');
-      var ref = "/thoughts/" + key +"/likes/";
+      icon.removeClass('fa-heart-o');
+      icon.addClass('fa-heart');
+      var ref = "/thoughts/" + key +"/likes";
+      var likers = "/thoughts/" + key +"/likers/";
+      var newKey = firebase.database().ref(likers).push().key;
+      var refLikers = likers + newKey;
       var updates = {};
       updates[ref] = parseInt(likes) + 1;
-      firebase.database().ref().update(updates, function (err) {
-          if (err) {
-              alert('oh no! the database was not updated!');
-          }
-      });
+      updates[refLikers] = {
+        uid: localStorage.getItem('userId')
+      };
+      firebase.database().ref().update(updates);
     };
 
-    function addMarker(latlng, icon, map , animation, thoughts, sender, key, likes) {
+    function getLikeHTML (liked, likes, key) {
+      
+      if (liked) {
+        return '<div class="likeButton"><i class="fa fa-heart" style="font-size: 25px; padding: 10px;"></i><span id = "likes">'+likes+'</span></div>';
+      }
+      return '<div class="likeButton"><i id="likeIcon" class="fa fa-heart-o" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+','+likes+')"></i><span id = "likes">'+likes+'</span></div>';
+    }
+    function addMarker(latlng, icon, map , animation, thoughts, sender, likers, key, likes) {
 
+      var liked = false;
+      angular.forEach(likers, function(liker) {
+        if (liker.uid === localStorage.getItem('userId')) {
+          liked = true;
+        }
+      });
         var contentString = '<div id="content">'+
                             '<h3>'+sender+'</h3>'+
                             '<p>'+thoughts+
@@ -314,7 +301,7 @@ angular
                             '<div id="comments"></div>'+
                             '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment" class="hidden" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
                             '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
-                            '<div id="likeIcon" class="likeButton"><i class="fa fa-thumbs-up" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+','+likes+')"></i><span id = "likes">'+likes+'</span></div>'+
+                            getLikeHTML(liked, likes, key)+
                             '<span><i style="font-size: 36px;" id="dropdownToggle" class="expandButton fa fa-caret-down" ng-click="dropdown($event,' + "'" + key + "'" + ')"></i></span></div>' +
                             '</div>';
 
@@ -353,6 +340,7 @@ angular
                 google.maps.Animation.DROP,
                 thoughtBubble.thought,
                 thoughtBubble.sender,
+                undefined,
                 thoughtBubble.key,
                 0);
     });
