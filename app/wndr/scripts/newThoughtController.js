@@ -30,7 +30,7 @@ angular
         $scope.position = position;
         var thoughtBubble = {
         thought: $scope.thought,
-        sender: 'Test',
+        sender: localStorage.getItem('username'),
         icon: $scope.iconName,
         lat: $scope.position.coords.latitude,
         lng: $scope.position.coords.longitude,
