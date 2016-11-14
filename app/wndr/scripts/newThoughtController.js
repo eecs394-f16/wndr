@@ -34,6 +34,7 @@ angular
         icon: $scope.iconName,
         lat: $scope.position.coords.latitude,
         lng: $scope.position.coords.longitude,
+        likes: 0
         };
         thoughtBubble = addToFirebase(thoughtBubble);
         supersonic.data.channel('addMarker').publish(thoughtBubble);

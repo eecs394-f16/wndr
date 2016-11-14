@@ -183,19 +183,25 @@ angular
         $scope.map.addListener('click', function() {
           $scope.ib.close();
         });
-        $scope.currentPosition = addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr');
+        $scope.currentPosition = addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr',-1);
 
         firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
             for (var thought in snapshot.val()) {
 
                 var latlng = new google.maps.LatLng(snapshot.val()[thought].lat, snapshot.val()[thought].lng);
+                var likes = 0;
+                if (snapshot.val()[thought].likes) {
+                  
+                  likes = snapshot.val()[thought].likes;
+                }
                 addMarker(latlng,
                           mapIcon(snapshot.val()[thought].icon),
                           $scope.map,
                           google.maps.Animation.DROP,
                           snapshot.val()[thought].thought,
                           snapshot.val()[thought].sender,
-                          thought);
+                          thought,
+                          likes);
             }
         });
     };
@@ -271,8 +277,27 @@ angular
         document.getElementById('comments').innerHTML = "";
       }
     };
+    
+    $scope.addLike = function (key,likes) {
+      
+      var like = document.getElementById('likes');
+      var icon = angular.element(document.getElementById('likeIcon'));
+      if (icon.hasClass('selected')) {
+        return;
+      }
+      like.innerHTML = likes + 1;
+      icon.addClass('selected');
+      var ref = "/thoughts/" + key +"/likes/";
+      var updates = {};
+      updates[ref] = parseInt(likes) + 1;
+      firebase.database().ref().update(updates, function (err) {
+          if (err) {
+              alert('oh no! the database was not updated!');
+          }
+      });
+    };
 
-    function addMarker(latlng, icon, map , animation, thoughts, sender, key) {
+    function addMarker(latlng, icon, map , animation, thoughts, sender, key, likes) {
 
         var contentString = '<div id="content">'+
                             '<h3>'+sender+'</h3>'+
@@ -281,6 +306,7 @@ angular
                             '<div id="comments"></div>'+
                             '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment" class="hidden" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
                             '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
+                            '<div id="likeIcon" class="likeButton"><i class="fa fa-thumbs-up" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+','+likes+')"></i><span id = "likes">'+likes+'</span></div>'+
                             '<span><i style="font-size: 36px;" id="dropdownToggle" class="expandButton fa fa-caret-down" ng-click="dropdown($event,' + "'" + key + "'" + ')"></i></span></div>' +
                             '</div>';
 
@@ -307,6 +333,11 @@ angular
     }
 
     supersonic.data.channel('addMarker').subscribe( function(thoughtBubble) {
+      supersonic.device.geolocation.getPosition().then( function(position){
+        var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
+        $scope.map.panTo(LatLng);
+        $scope.currentPosition.setPosition(LatLng);
+      });
       var latlng = new google.maps.LatLng(thoughtBubble.lat, thoughtBubble.lng);
       addMarker(latlng,
                 mapIcon(thoughtBubble.icon),
@@ -314,7 +345,8 @@ angular
                 google.maps.Animation.DROP,
                 thoughtBubble.thought,
                 thoughtBubble.sender,
-                thoughtBubble.key);
+                thoughtBubble.key,
+                0);
     });
     
     steroids.tabBar.on('didchange', function() {
