@@ -70,3 +70,11 @@ li {
 .hidden {
   visibility: hidden;
 }
+
+.gm-style-iw + div {
+  display: none;
+  margin: 0px;
+  width: 0px;
+  height: 0px;
+  padding: 0px;
+}
