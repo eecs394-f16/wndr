@@ -2,6 +2,23 @@ angular
   .module('wndr')
   .controller('indexController', function ($scope, supersonic, $compile,$window) {
 
+    newListingBtn = new supersonic.ui.NavigationBarButton({
+      onTap: function() {
+        firebase.auth().signOut().then(function() {
+          // Sign-out successful.
+          localStorage.removeItem('username');
+          localStorage.removeItem('userId');
+          alert("Successfully logged out");
+          var view = new supersonic.ui.View("wndr#login");
+          supersonic.ui.layers.push(view);
+
+        }, function(error) {
+          // An error happened.
+        });
+
+      },
+      styleId: "nav-logout"
+    });
     $scope.markers = [];
     $scope.currentPosition = undefined;
     $scope.commentInput = "";
@@ -125,9 +142,9 @@ angular
     supersonic.ui.navigationBar.update({
       title: "wndr",
       overrideBackButton: false,
-      //buttons: {
-      //  right: [newListingBtn]
-      //}
+      buttons: {
+        right: [newListingBtn]
+      }
     }).then(supersonic.ui.navigationBar.show());
 
     //view initialization
@@ -169,7 +186,7 @@ angular
                 var latlng = new google.maps.LatLng(snapshot.val()[thought].lat, snapshot.val()[thought].lng);
                 var likes = 0;
                 if (snapshot.val()[thought].likes) {
-                  
+
                   likes = snapshot.val()[thought].likes;
                 }
                 addMarker(latlng,
@@ -256,9 +273,9 @@ angular
         document.getElementById('comments').innerHTML = "";
       }
     };
-    
+
     $scope.addLike = function (key,likes) {
-      
+
       var like = document.getElementById('likes');
       var icon = angular.element(document.getElementById('likeIcon'));
       like.innerHTML = likes + 1;
@@ -280,7 +297,7 @@ angular
     };
 
     function getLikeHTML (liked, likes, key) {
-      
+
       if (liked) {
         return '<div class="likeButton"><i class="fa fa-heart" style="font-size: 25px; padding: 10px;"></i><span id = "likes">'+likes+'</span></div>';
       }
@@ -344,7 +361,7 @@ angular
                 thoughtBubble.key,
                 0);
     });
-    
+
     steroids.tabBar.on('didchange', function() {
       supersonic.device.geolocation.getPosition().then( function(position){
         var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
