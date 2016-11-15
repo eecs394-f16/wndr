@@ -1,21 +1,9 @@
-<style>
-    
-.img-full-bck{
-  width: 100%;
-
-}
-button {
-    position: fixed;
-    top: 75%;
-    left: 40%;
-}
-</style>
 <header>
 	<script>
 	document.ontouchmove = function(e){ e.preventDefault(); }
 	</script>
 </header>
-<div ng-controller="loginController">
-    <button ng-click="FBLogin()">Continue with Facebook</button>
+<div style="text-align: center" ng-controller="loginController">
+    <button class="button button-positive" ng-click="FBLogin()">Continue with Facebook</button>
     <img style="width: 100%" class='img-full-bck' id='background-img' src='/img/background.png' />
 </div>

@@ -199,16 +199,13 @@ angular
     }
 
     $scope.addComment = function (key){
-      var dropdown = angular.element(document.getElementById('dropdownToggle'));
       var input = angular.element(document.getElementById('newComment'));
-      input.removeClass('hidden');
-      input.addClass("comment");
-      if ( dropdown.hasClass('fa-caret-down')) {
-        dropdown.removeClass('fa-caret-down');
-        }
-      if (!dropdown.hasClass('fa-caret-up')) {
-        dropdown.addClass('fa-caret-up');
+      if (input.hasClass('hidden')) {
+          input.removeClass('hidden');
+      } else {
+          $scope.submitComment(key);
       }
+      input.addClass("comment");
       showComments(key);
       var element = $window.document.getElementById('newComment');
         if(element)
@@ -238,24 +235,6 @@ angular
           }
       });
     }
-
-    $scope.dropdown = function ($event, key){
-      var el = angular.element($event.currentTarget);
-      if (el.hasClass( "fa-caret-down")) {
-        el.removeClass('fa-caret-down');
-        el.addClass('fa-caret-up');
-        showComments(key);
-      } else {
-        el.removeClass('fa-caret-up');
-        el.addClass('fa-caret-down');
-        var input = angular.element(document.getElementById('newComment'));
-        if (input.hasClass('comment')) {
-          input.removeClass('comment');
-          input.addClass("hidden");
-        }
-        document.getElementById('comments').innerHTML = "";
-      }
-    };
     
     $scope.addLike = function (key,likes) {
       
@@ -302,8 +281,7 @@ angular
                             '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment" class="hidden" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
                             '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
                             getLikeHTML(liked, likes, key)+
-                            '<span><i style="font-size: 36px;" id="dropdownToggle" class="expandButton fa fa-caret-down" ng-click="dropdown($event,' + "'" + key + "'" + ')"></i></span></div>' +
-                            '</div>';
+                            '</div></div>';
 
         var compiled = $compile(contentString)($scope);
 

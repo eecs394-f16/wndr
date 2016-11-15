@@ -1,3 +1,16 @@
+.img-full-bck{
+  width: 100%;
+
+}
+.button {
+    position: fixed;
+    left: 30%;
+    width: 40%;
+    top: 75%;
+    background-color: #3b5998 !important;
+    border: none !important;
+}
+
 .supersonic-navbar-mock {
   background-color: #00B5FF !important;
   text-align: center;
