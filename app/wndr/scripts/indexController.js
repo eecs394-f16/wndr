@@ -154,41 +154,62 @@ angular
       });
     }
     
-    $scope.addLike = function (key,likes) {
+    $scope.addLike = function (key) {
       
       var like = document.getElementById('likes');
       var icon = angular.element(document.getElementById('likeIcon'));
-      like.innerHTML = likes + 1;
-      if (icon.hasClass('fa-heart')) {
-        return;
-      }
-      icon.removeClass('fa-heart-o');
-      icon.addClass('fa-heart');
       var ref = "/thoughts/" + key +"/likes";
       var likers = "/thoughts/" + key +"/likers/";
-      var newKey = firebase.database().ref(likers).push().key;
-      var refLikers = likers + newKey;
-      var updates = {};
-      updates[ref] = parseInt(likes) + 1;
-      updates[refLikers] = {
-        uid: localStorage.getItem('userId')
-      };
-      firebase.database().ref().update(updates);
-    };
+      var likes = parseInt(like.innerHTML);
+      var likerKey = icon.attr('data');
+            supersonic.logger.debug('here');
 
-    function getLikeHTML (liked, likes, key) {
+      var updates = {};
+      supersonic.logger.debug('here');
+      supersonic.logger.debug(likerKey);
+
+      if (icon.hasClass('fa-heart')) {
+        
+        likes = likes - 1;
+        like.innerHTML = likes;
+        icon.removeClass('fa-heart');
+        icon.addClass('fa-heart-o');
+        supersonic.logger.debug(likers+likerKey);
+        firebase.database().ref(likers+likerKey).remove();
+      } else{
+        
+        likes = likes + 1;
+        like.innerHTML = likes;
+        icon.removeClass('fa-heart-o');
+        icon.addClass('fa-heart');
+        
+        var newKey = firebase.database().ref(likers).push().key;
+        icon.attr('data',newKey);
+        var refLikers = likers + newKey;
+        updates[refLikers] = {
+          uid: localStorage.getItem('userId')
+        };
+      }
+      
+      updates[ref] = parseInt(likes);
+      firebase.database().ref().update(updates);
+  };
+
+    function getLikeHTML (liked, likes, key, likerKey) {
       
       if (liked) {
-        return '<div class="likeButton"><i class="fa fa-heart" style="font-size: 25px; padding: 10px;"></i><span id = "likes">'+likes+'</span></div>';
+        return '<div class="likeButton"><i id="likeIcon" data="'+likerKey+'" class="fa fa-heart" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes">'+likes+'</span></div>';
       }
-      return '<div class="likeButton"><i id="likeIcon" class="fa fa-heart-o" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+','+likes+')"></i><span id = "likes">'+likes+'</span></div>';
+      return '<div class="likeButton"><i id="likeIcon"  data="'+likerKey+'"class="fa fa-heart-o" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes">'+likes+'</span></div>';
     }
     function addMarker(latlng, icon, map , animation, thoughts, sender, likers, key, likes) {
 
       var liked = false;
-      angular.forEach(likers, function(liker) {
+      var likerKey;
+      angular.forEach(likers, function(liker,key) {
         if (liker.uid === localStorage.getItem('userId')) {
           liked = true;
+         likerKey = key;
         }
       });
         var contentString = '<div id="content">'+
@@ -198,7 +219,7 @@ angular
                             '<div id="comments"></div>'+
                             '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment" class="hidden" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
                             '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
-                            getLikeHTML(liked, likes, key)+
+                            getLikeHTML(liked, likes, key, likerKey)+
                             '</div></div>';
 
         var compiled = $compile(contentString)($scope);

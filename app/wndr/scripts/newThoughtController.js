@@ -25,6 +25,10 @@ angular
         supersonic.ui.dialog.alert("Please select an Icon!");
         return;
       }
+      if ($scope.thought === "") {
+        supersonic.ui.dialog.alert("Please input some text for a wndr!");
+        return;
+      }
       $scope.selected.removeClass('selected');
       supersonic.device.geolocation.getPosition().then( function(position){
         $scope.position = position;
