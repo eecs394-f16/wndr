@@ -189,11 +189,7 @@ angular
       var likers = "/thoughts/" + key +"/likers/";
       var likes = parseInt(like.innerHTML);
       var likerKey = icon.attr('data');
-            supersonic.logger.debug('here');
-
       var updates = {};
-      supersonic.logger.debug('here');
-      supersonic.logger.debug(likerKey);
 
       if (icon.hasClass('fa-heart')) {
         
@@ -201,7 +197,6 @@ angular
         like.innerHTML = likes;
         icon.removeClass('fa-heart');
         icon.addClass('fa-heart-o');
-        supersonic.logger.debug(likers+likerKey);
         firebase.database().ref(likers+likerKey).remove();
       } else{
         
