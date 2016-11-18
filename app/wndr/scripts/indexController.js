@@ -72,14 +72,34 @@ angular
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
 
-        $scope.map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        $scope.map = map;
+        google.maps.event.addListener(map, 'bounds_changed', function() {
+            $scope.bounds = map.getBounds();
+        });
         $scope.overlay = new google.maps.OverlayView();
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
         $scope.map.addListener('click', function() {
           $scope.ib.close();
         });
-        $scope.currentPosition = addMarker(latlng, icons.red_flag, $scope.map, google.maps.Animation.DROP, 'This is your location!', 'Wndr',-1);
+        
+        $scope.currentPosition = new google.maps.Marker({
+                        position: latlng,
+                        icon: icons.red_flag,
+                        map: map,
+                        animation: google.maps.Animation.DROP
+                        }).addListener('click', function () {
+                          $scope.ib.close();
+                          $scope.commentInput = "";
+                          var options = {
+                            content: "This is your location",
+                            disableAutoPan : true
+                          };
+                          $scope.ib.setOptions(options);
+                          $scope.ib.open(map,this);
+                          map.panTo(latlng);
+                        });
 
         firebase.database().ref('/thoughts/').once('value').then(function (snapshot) {
             for (var thought in snapshot.val()) {
@@ -107,7 +127,7 @@ angular
     function showComments(key){
       var ref = "/thoughts/" + key +"/comments/";
        firebase.database().ref(ref).once('value').then(function (snapshot) {
-          var commentElement = document.getElementById('comments');
+          var commentElement = document.getElementById('comments'+key);
           var html = "";
             for (var comment in snapshot.val()) {
                 html = html + '<div class="comment">'+snapshot.val()[comment].text+'</div>';
@@ -117,7 +137,8 @@ angular
     }
 
     $scope.addComment = function (key){
-      var input = angular.element(document.getElementById('newComment'));
+      angular.element(document.getElementsByClassName("input")).addClass('hidden');
+      var input = angular.element(document.getElementById('newComment'+key));
       if (input.hasClass('hidden')) {
           input.removeClass('hidden');
       } else {
@@ -125,15 +146,19 @@ angular
       }
       input.addClass("comment");
       showComments(key);
-      var element = $window.document.getElementById('newComment');
+      var element = $window.document.getElementById('newComment'+key);
         if(element)
           element.focus();
 
     };
 
     $scope.submitComment = function (key){
+      if ($scope.commentInput === ""){
+        return;
+      }
       document.activeElement.blur();
-      var commentElement = document.getElementById('comments');
+      var commentsId = 'comments' + key;
+      var commentElement = document.getElementById(commentsId);
       commentElement.innerHTML = commentElement.innerHTML + '<div class="comment">'+$scope.commentInput+'</div>';
       postComment($scope.commentInput, key);
       $scope.commentInput = "";
@@ -156,8 +181,10 @@ angular
     
     $scope.addLike = function (key) {
       
-      var like = document.getElementById('likes');
-      var icon = angular.element(document.getElementById('likeIcon'));
+      var iconId = "likeIcon"+ key;
+      var likeId = "likes" + key;
+      var like = document.getElementById(likeId);
+      var icon = angular.element(document.getElementById(iconId));
       var ref = "/thoughts/" + key +"/likes";
       var likers = "/thoughts/" + key +"/likers/";
       var likes = parseInt(like.innerHTML);
@@ -198,9 +225,9 @@ angular
     function getLikeHTML (liked, likes, key, likerKey) {
       
       if (liked) {
-        return '<div class="likeButton"><i id="likeIcon" data="'+likerKey+'" class="fa fa-heart" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes">'+likes+'</span></div>';
+        return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes'+key+'">'+likes+'</span></div>';
       }
-      return '<div class="likeButton"><i id="likeIcon"  data="'+likerKey+'"class="fa fa-heart-o" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes">'+likes+'</span></div>';
+      return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes'+key+'">'+likes+'</span></div>';
     }
     function addMarker(latlng, icon, map , animation, thoughts, sender, likers, key, likes) {
 
@@ -213,11 +240,11 @@ angular
         }
       });
         var contentString = '<div id="content">'+
-                            '<h3>'+sender+'</h3>'+
-                            '<p>'+thoughts+
-                            '</p>'+
-                            '<div id="comments"></div>'+
-                            '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment" class="hidden" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
+                            '<p>'+sender+'</p>'+
+                            '<div id="info-thoughts">"'+thoughts+
+                            '"</div>'+
+                            '<div id="comments'+key+'"></div>'+
+                            '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment'+key+'" class="hidden input" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
                             '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
                             getLikeHTML(liked, likes, key, likerKey)+
                             '</div></div>';
@@ -240,6 +267,8 @@ angular
                           $scope.ib.open(map,this);
                           map.panTo(latlng);
                         });
+        result.contentHTML = contentString;
+        result.position = latlng;
         $scope.markers.push(result);
         return result;
     }
@@ -270,6 +299,33 @@ angular
       });
     });
 
+    $scope.listView = function() {
+      $scope.ib.close();
+      document.getElementById("floating-panel").className = "";
+      var markers = $scope.markers;
+      var HTML = "";
+      for (var i=0; i < markers.length; i++) {
+
+        if(  $scope.bounds.contains(markers[i].position) ){
+
+           HTML = HTML + markers[i].contentHTML;
+        }
+      }
+      var compiledList = $compile(HTML)($scope);
+      var listBox = document.getElementById('floating-panel');
+      while (listBox.firstChild) {
+        listBox.removeChild(listBox.firstChild);
+      }
+      for (var j=0; j < compiledList.length; j++) {
+        
+        listBox.appendChild(compiledList[j]);
+      }
+    };
+    
+    $scope.mapView = function() {
+       document.getElementById("floating-panel").className = "hidden";
+    };
+    
     var updatePosition = function () {
         supersonic.device.geolocation.getPosition().then(function (position) {
             var LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);

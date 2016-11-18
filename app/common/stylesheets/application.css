@@ -2,7 +2,8 @@
   width: 100%;
 
 }
-.button {
+
+.FBbutton {
     position: fixed;
     left: 30%;
     width: 40%;
@@ -102,4 +103,54 @@ textarea {
   display : inline;
   padding-top : 10px;
   margin : 5px;  
+}
+
+#floating-panel {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  right: 10%
+  bottom: 10%;
+  width: 80%;
+  height: 75%;
+  overflow: scroll;
+  z-index: 5;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #999;
+  text-align: left;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  border-radius: 5;
+ }
+
+#floating-button-list {
+  position: absolute;
+  top: 5%;
+  right: 5%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 0;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  border-radius: 5;
+}
+
+#floating-button-map{
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 0;
+  border: 1px solid #999;
+  text-align: center;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+}
+
+#info-thoughts {
+  font-size: 20px;
 }
