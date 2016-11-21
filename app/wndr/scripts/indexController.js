@@ -1,6 +1,6 @@
 angular
   .module('wndr')
-  .controller('indexController', function (icons, $interval, $scope, supersonic, $compile,$window) {
+  .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
 
     $scope.markers = [];
     $scope.currentPosition = undefined;
@@ -82,6 +82,7 @@ angular
         $scope.overlay.setMap($scope.map);
         $scope.map.addListener('click', function() {
           $scope.ib.close();
+          $scope.closeWndr();
         });
         
         $scope.currentPosition = new google.maps.Marker({
@@ -136,21 +137,21 @@ angular
         });
     }
 
-    $scope.addComment = function (key){
-      angular.element(document.getElementsByClassName("input")).addClass('hidden');
-      var input = angular.element(document.getElementById('newComment'+key));
-      if (input.hasClass('hidden')) {
-          input.removeClass('hidden');
-      } else {
-          $scope.submitComment(key);
-      }
-      input.addClass("comment");
-      showComments(key);
-      var element = $window.document.getElementById('newComment'+key);
-        if(element)
-          element.focus();
-
-    };
+    //$scope.addComment = function (key){
+    //  angular.element(document.getElementsByClassName("input")).addClass('hidden');
+    //  var input = angular.element(document.getElementById('newComment'+key));
+    //  if (input.hasClass('hidden')) {
+    //      input.removeClass('hidden');
+    //  } else {
+    //      $scope.submitComment(key);
+    //  }
+    //  input.addClass("comment");
+    //  showComments(key);
+    //  var element = $window.document.getElementById('newComment'+key);
+    //    if(element)
+    //      element.focus();
+    //
+    //};
 
     $scope.submitComment = function (key){
       if ($scope.commentInput === ""){
@@ -216,116 +217,175 @@ angular
       updates[ref] = parseInt(likes);
       firebase.database().ref().update(updates);
   };
-
-    function getLikeHTML (liked, likes, key, likerKey) {
-      
-      if (liked) {
-        return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes'+key+'">'+likes+'</span></div>';
+  
+  $scope.closeWndr = function () {
+    var listBox = angular.element(document.getElementById('detail-panel'));
+    listBox.addClass('hidden');
+  };
+  
+  $scope.detailWndr = function (key) {
+    
+    $scope.ib.close();
+    document.getElementById("floating-panel").className = "hidden";
+    var ref = "/thoughts/" + key;
+    firebase.database().ref(ref).once('value').then(function (snapshot) {
+      var thought = snapshot.val();
+      var likes = 0;
+      if (thought.likes) {
+        
+        likes = thought.likes;
       }
-      return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o" style="font-size: 25px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span id = "likes'+key+'">'+likes+'</span></div>';
-    }
-    function addMarker(latlng, icon, map , animation, thoughts, sender, likers, key, likes) {
-
       var liked = false;
       var likerKey;
-      angular.forEach(likers, function(liker,key) {
+      angular.forEach(thought.likers, function(liker,key) {
         if (liker.uid === localStorage.getItem('userId')) {
           liked = true;
          likerKey = key;
         }
       });
-        var contentString = '<div id="content">'+
-                            '<p>'+sender+'</p>'+
-                            '<div id="info-thoughts">"'+thoughts+
-                            '"</div>'+
-                            '<div id="comments'+key+'"></div>'+
-                            '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')"><input id="newComment'+key+'" class="hidden input" type="text" ng-model="commentInput" placeholder="Insert comment here"/></form>'+
-                            '<div><button class="addComment" ng-click="addComment('+"'"+key+"'"+')">Comment</button>'+
-                            getLikeHTML(liked, likes, key, likerKey)+
-                            '</div></div>';
+      var wndrIcon = mapIcon(thought.icon);
+      var contentString =
+      '<div id="content">'+
+      '<img src="'+wndrIcon.url+'" class="avatar">'+
+      '<span style="display : inline;">  '+thought.sender+'</span>'+
+      '<div id="info-thoughts">"'+thought.thought+
+      '"</div>'+
+      '<div>'+
+        getLikeHTML(liked, likes, key, likerKey)+
+        '<br><i class="fa fa-comment" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="closeWndr()"></i>'+
+      '</div>'+
+      '<div id="comments'+key+'" class="comments"></div>'+
+      '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
+      '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" ng-model="commentInput" placeholder="Insert comment here"/>'+
+      '<input type="submit" class="addComment" style="float: right;" id="submit" value="Comment" />'+'</form>'+
+      '</div>';
 
-        var compiled = $compile(contentString)($scope);
-
-        var options = {
-                        content: compiled[0],
-                        disableAutoPan : true
-                      };
-        var result = new google.maps.Marker({
-                        position: latlng,
-                        icon: icon,
-                        map: map,
-                        animation: animation
-                        }).addListener('click', function () {
-                          $scope.ib.close();
-                          $scope.commentInput = "";
-                          $scope.ib.setOptions(options);
-                          $scope.ib.open(map,this);
-                          map.panTo(latlng);
-                        });
-        result.contentHTML = contentString;
-        result.position = latlng;
-        $scope.markers.push(result);
-        return result;
-    }
-
-    supersonic.data.channel('addMarker').subscribe( function(thoughtBubble) {
-      supersonic.device.geolocation.getPosition().then( function(position){
-        var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
-        $scope.map.panTo(LatLng);
-        $scope.currentPosition.setPosition(LatLng);
-      });
-      var latlng = new google.maps.LatLng(thoughtBubble.lat, thoughtBubble.lng);
-      addMarker(latlng,
-                mapIcon(thoughtBubble.icon),
-                $scope.map,
-                google.maps.Animation.DROP,
-                thoughtBubble.thought,
-                thoughtBubble.sender,
-                undefined,
-                thoughtBubble.key,
-                0);
-    });
-    
-    steroids.tabBar.on('didchange', function() {
-      supersonic.device.geolocation.getPosition().then( function(position){
-        var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
-        $scope.map.panTo(LatLng);
-        $scope.currentPosition.setPosition(LatLng);
-      });
-    });
-
-    $scope.listView = function() {
-      $scope.ib.close();
-      document.getElementById("floating-panel").className = "";
-      var markers = $scope.markers;
-      var HTML = "";
-      for (var i=0; i < markers.length; i++) {
-
-        if(  $scope.bounds.contains(markers[i].position) ){
-
-           HTML = HTML + markers[i].contentHTML;
-        }
-      }
-      var compiledList = $compile(HTML)($scope);
-      var listBox = document.getElementById('floating-panel');
+      var compiledList = $compile(contentString)($scope);
+      var listBox = document.getElementById('detail-panel');
+      listBox.className = "";
       while (listBox.firstChild) {
         listBox.removeChild(listBox.firstChild);
       }
-      for (var j=0; j < compiledList.length; j++) {
-        
-        listBox.appendChild(compiledList[j]);
+      var promises = [];
+      angular.forEach (compiledList, function(compiledEl) {
+        promises.push(compiledEl);
+        listBox.appendChild(compiledEl);
+      });
+      $q.all(promises).then(showComments(key));
+    });
+  };
+
+  function getLikeHTML (liked, likes, key, likerKey) {
+    
+    if (liked) {
+      return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
+    }
+    return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
+  }
+  function addMarker(latlng, icon, map , animation, thoughts, sender, likers, key, likes) {
+
+    var liked = false;
+    var likerKey;
+    angular.forEach(likers, function(liker,key) {
+      if (liker.uid === localStorage.getItem('userId')) {
+        liked = true;
+       likerKey = key;
       }
-    };
-    
-    $scope.mapView = function() {
-       document.getElementById("floating-panel").className = "hidden";
-    };
-    
-    var updatePosition = function () {
-        supersonic.device.geolocation.getPosition().then(function (position) {
-            var LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-            $scope.currentPosition.setPosition(LatLng);
-        });
-    };
-    $interval(updatePosition, 60000);
+    });
+      var contentString = '<div id="content">'+
+                            '<img src="'+icon.url+'" class="avatar">'+
+                            '<span style="display : inline;">  '+sender+'</span>'+
+                            '<div id="info-thoughts">"'+thoughts+
+                            '"</div>'+
+                            '<div>'+
+                              getLikeHTML(liked, likes, key, likerKey)+
+                              '<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="detailWndr('+"'"+key+"'"+')"></i>'+
+                            '</div></div>';
+
+      var compiled = $compile(contentString)($scope);
+
+      var options = {
+                      content: compiled[0],
+                      disableAutoPan : true
+                    };
+      var result = new google.maps.Marker({
+                      position: latlng,
+                      icon: icon,
+                      map: map,
+                      animation: animation
+                      }).addListener('click', function () {
+                        $scope.ib.close();
+                        $scope.commentInput = "";
+                        $scope.ib.setOptions(options);
+                        $scope.ib.open(map,this);
+                        map.panTo(latlng);
+                      });
+      result.contentHTML = contentString;
+      result.position = latlng;
+      $scope.markers.push(result);
+      return result;
+  }
+
+  supersonic.data.channel('addMarker').subscribe( function(thoughtBubble) {
+    supersonic.device.geolocation.getPosition().then( function(position){
+      var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
+      $scope.map.panTo(LatLng);
+      $scope.currentPosition.setPosition(LatLng);
+    });
+    var latlng = new google.maps.LatLng(thoughtBubble.lat, thoughtBubble.lng);
+    addMarker(latlng,
+              mapIcon(thoughtBubble.icon),
+              $scope.map,
+              google.maps.Animation.DROP,
+              thoughtBubble.thought,
+              thoughtBubble.sender,
+              undefined,
+              thoughtBubble.key,
+              0);
+  });
+  
+  steroids.tabBar.on('didchange', function() {
+    supersonic.device.geolocation.getPosition().then( function(position){
+      var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
+      $scope.map.panTo(LatLng);
+      $scope.currentPosition.setPosition(LatLng);
+    });
+  });
+
+  $scope.listView = function() {
+    $scope.closeWndr();
+    $scope.ib.close();
+    document.getElementById("floating-panel").className = "";
+    var markers = $scope.markers;
+    var HTML = "";
+    for (var i=0; i < markers.length; i++) {
+
+      if(  $scope.bounds.contains(markers[i].position) ){
+
+         HTML = HTML + markers[i].contentHTML;
+      }
+    }
+    var compiledList = $compile(HTML)($scope);
+    var listBox = document.getElementById('floating-panel');
+    while (listBox.firstChild) {
+      listBox.removeChild(listBox.firstChild);
+    }
+    for (var j=0; j < compiledList.length; j++) {
+      
+      listBox.appendChild(compiledList[j]);
+    }
+  };
+  
+  $scope.mapView = function() {
+    $scope.closeWndr();
+    document.getElementById("floating-panel").className = "hidden";
+  };
+  
+  var updatePosition = function () {
+      supersonic.device.geolocation.getPosition().then(function (position) {
+          var LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+          $scope.currentPosition.setPosition(LatLng);
+      });
+  };
+  $interval(updatePosition, 60000);
 });

@@ -56,7 +56,7 @@ textarea {
   color: white;
   padding: 10px 10px;
   text-align: center;
-  border-radius: 5;
+  border-radius: 5px;
 }
 
 .addComment{
@@ -67,6 +67,7 @@ textarea {
   text-align: center;
   moz-border-radius: 15px;
   -webkit-border-radius: 15px;
+  border-radius: 5px;
 }
 
 .selected {
@@ -109,7 +110,7 @@ textarea {
   position: absolute;
   top: 15%;
   left: 10%;
-  right: 10%
+  right: 10%;
   bottom: 10%;
   width: 80%;
   height: 75%;
@@ -121,7 +122,7 @@ textarea {
   text-align: left;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
-  border-radius: 5;
+  border-radius: 5px;
  }
 
 #floating-button-list {
@@ -135,7 +136,7 @@ textarea {
   text-align: center;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
-  border-radius: 5;
+  border-radius: 5px;
 }
 
 #floating-button-map{
@@ -153,4 +154,51 @@ textarea {
 
 #info-thoughts {
   font-size: 20px;
+}
+
+.avatar {
+  padding: 0px 5px;
+  width: 10%;
+}
+
+#content {
+  padding-bottom: 10px;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+}
+
+#detail-panel {
+  position: absolute;
+  top: 15%;
+  left: 10%;
+  right: 10%;
+  bottom: 13%;
+  width: 80%;
+  height: 72%;
+  z-index: 5;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #999;
+  text-align: left;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+  border-radius: 5px;
+ }
+ 
+ .inline {
+  display: inline;
+ }
+ 
+.comments{
+  max-height: 110px;
+  overflow-y: scroll;
+  font-family: 'Roboto','sans-serif';
+  line-height: 30px;
+}
+
+.input {
+  border: solid;
+  border-width: thin;
+  margin: 5px 0;
+  border-color: grey;
 }
