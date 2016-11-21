@@ -134,6 +134,9 @@ angular
                 html = html + '<div class="comment">'+snapshot.val()[comment].text+'</div>';
             }
           commentElement.innerHTML = html;
+          commentElement.scrollTop = commentElement.scrollHeight;
+          var listBox = document.getElementById('detail-panel');
+          listBox.scrollTop = listBox.scrollHeight;
         });
     }
 
@@ -228,6 +231,7 @@ angular
     $scope.ib.close();
     document.getElementById("floating-panel").className = "hidden";
     var ref = "/thoughts/" + key;
+    var listBox = document.getElementById('detail-panel');
     firebase.database().ref(ref).once('value').then(function (snapshot) {
       var thought = snapshot.val();
       var likes = 0;
@@ -261,7 +265,6 @@ angular
       '</div>';
 
       var compiledList = $compile(contentString)($scope);
-      var listBox = document.getElementById('detail-panel');
       listBox.className = "";
       while (listBox.firstChild) {
         listBox.removeChild(listBox.firstChild);
@@ -271,7 +274,9 @@ angular
         promises.push(compiledEl);
         listBox.appendChild(compiledEl);
       });
-      $q.all(promises).then(showComments(key));
+      $q.all(promises).then(function () {
+        showComments(key);
+        });
     });
   };
 
@@ -314,7 +319,7 @@ angular
                       map: map,
                       animation: animation
                       }).addListener('click', function () {
-                        $scope.ib.close();
+                        closeAll();
                         $scope.commentInput = "";
                         $scope.ib.setOptions(options);
                         $scope.ib.open(map,this);
@@ -353,8 +358,7 @@ angular
   });
 
   $scope.listView = function() {
-    $scope.closeWndr();
-    $scope.ib.close();
+    closeAll();
     document.getElementById("floating-panel").className = "";
     var markers = $scope.markers;
     var HTML = "";
@@ -377,8 +381,7 @@ angular
   };
   
   $scope.mapView = function() {
-    $scope.closeWndr();
-    document.getElementById("floating-panel").className = "hidden";
+    closeAll();
   };
   
   var updatePosition = function () {
@@ -388,4 +391,10 @@ angular
       });
   };
   $interval(updatePosition, 60000);
+  
+  function closeAll() {
+    $scope.ib.close();
+    document.getElementById("floating-panel").className = "hidden";
+    $scope.closeWndr();
+  }
 });
