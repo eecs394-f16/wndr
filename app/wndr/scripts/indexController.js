@@ -84,7 +84,7 @@ angular
           $scope.ib.close();
           $scope.closeWndr();
         });
-        
+
         $scope.currentPosition = new google.maps.Marker({
                         position: latlng,
                         icon: icons.red_flag,
@@ -108,7 +108,7 @@ angular
                 var latlng = new google.maps.LatLng(snapshot.val()[thought].lat, snapshot.val()[thought].lng);
                 var likes = 0;
                 if (snapshot.val()[thought].likes) {
-                  
+
                   likes = snapshot.val()[thought].likes;
                 }
                 addMarker(latlng,
@@ -182,9 +182,9 @@ angular
           }
       });
     }
-    
+
     $scope.addLike = function (key) {
-      
+
       var iconId = "likeIcon"+ key;
       var likeId = "likes" + key;
       var like = document.getElementById(likeId);
@@ -196,19 +196,19 @@ angular
       var updates = {};
 
       if (icon.hasClass('fa-heart')) {
-        
+
         likes = likes - 1;
         like.innerHTML = likes;
         icon.removeClass('fa-heart');
         icon.addClass('fa-heart-o');
         firebase.database().ref(likers+likerKey).remove();
       } else{
-        
+
         likes = likes + 1;
         like.innerHTML = likes;
         icon.removeClass('fa-heart-o');
         icon.addClass('fa-heart');
-        
+
         var newKey = firebase.database().ref(likers).push().key;
         icon.attr('data',newKey);
         var refLikers = likers + newKey;
@@ -216,18 +216,18 @@ angular
           uid: localStorage.getItem('userId')
         };
       }
-      
+
       updates[ref] = parseInt(likes);
       firebase.database().ref().update(updates);
   };
-  
+
   $scope.closeWndr = function () {
     var listBox = angular.element(document.getElementById('detail-panel'));
     listBox.addClass('hidden');
   };
-  
+
   $scope.detailWndr = function (key) {
-    
+
     $scope.ib.close();
     document.getElementById("floating-panel").className = "hidden";
     var ref = "/thoughts/" + key;
@@ -236,7 +236,7 @@ angular
       var thought = snapshot.val();
       var likes = 0;
       if (thought.likes) {
-        
+
         likes = thought.likes;
       }
       var liked = false;
@@ -260,7 +260,7 @@ angular
       '</div>'+
       '<div id="comments'+key+'" class="comments"></div>'+
       '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
-      '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" ng-model="commentInput" placeholder="Insert comment here"/>'+
+      '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
       '<input type="submit" class="addComment" style="float: right;" id="submit" value="Comment" />'+'</form>'+
       '</div>';
 
@@ -281,7 +281,7 @@ angular
   };
 
   function getLikeHTML (liked, likes, key, likerKey) {
-    
+
     if (liked) {
       return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
     }
@@ -348,7 +348,7 @@ angular
               thoughtBubble.key,
               0);
   });
-  
+
   steroids.tabBar.on('didchange', function() {
     supersonic.device.geolocation.getPosition().then( function(position){
       var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
@@ -375,15 +375,15 @@ angular
       listBox.removeChild(listBox.firstChild);
     }
     for (var j=0; j < compiledList.length; j++) {
-      
+
       listBox.appendChild(compiledList[j]);
     }
   };
-  
+
   $scope.mapView = function() {
     closeAll();
   };
-  
+
   var updatePosition = function () {
       supersonic.device.geolocation.getPosition().then(function (position) {
           var LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -391,7 +391,7 @@ angular
       });
   };
   $interval(updatePosition, 60000);
-  
+
   function closeAll() {
     $scope.ib.close();
     document.getElementById("floating-panel").className = "hidden";
