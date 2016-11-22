@@ -5,7 +5,7 @@ angular
     $scope.markers = [];
     $scope.currentPosition = undefined;
     $scope.commentInput = "";
-    $scope.likeCount ;
+    $scope.likeCount = 0;
 
      var mapIcon = function (iconName) {
 
@@ -196,18 +196,15 @@ angular
       } else{
 
         likes = likes + 1;
-<<<<<<< HEAD
         for (i=0; i<iconEls.length; i++) {
           iconEl = angular.element(iconEls[i]);
           iconEl.removeClass('fa-heart-o');
           iconEl.addClass('fa-heart');
         }
-=======
         like.innerHTML = likes;
         icon.removeClass('fa-heart-o');
         icon.addClass('fa-heart');
 
->>>>>>> origin/master
         var newKey = firebase.database().ref(likers).push().key;
         icon.attr('data',newKey);
         var refLikers = likers + newKey;
@@ -215,14 +212,10 @@ angular
           uid: localStorage.getItem('userId')
         };
       }
-<<<<<<< HEAD
       
       for (i=0; i<likeEls.length; i++) {
         likeEls[i].innerHTML = likes;
       }
-=======
-
->>>>>>> origin/master
       updates[ref] = parseInt(likes);
       firebase.database().ref().update(updates);
   };
@@ -236,14 +229,8 @@ angular
   };
 
   $scope.detailWndr = function (key) {
-<<<<<<< HEAD
-    
+ 
     closeAll();
-=======
-
-    $scope.ib.close();
-    document.getElementById("floating-panel").className = "hidden";
->>>>>>> origin/master
     var ref = "/thoughts/" + key;
     var listBox = document.getElementById('detail-panel');
     listBox.className = "";
