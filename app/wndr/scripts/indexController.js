@@ -107,9 +107,12 @@ angular
 
                 var latlng = new google.maps.LatLng(snapshot.val()[thought].lat, snapshot.val()[thought].lng);
                 var likes = 0;
+                var comments = 0;
                 if (snapshot.val()[thought].likes) {
-
                   likes = snapshot.val()[thought].likes;
+                }
+                if (snapshot.val()[thought].comments) {
+                    comments = Object.keys(snapshot.val()[thought].comments).length;
                 }
                 addMarker(latlng,
                           mapIcon(snapshot.val()[thought].icon),
@@ -118,6 +121,7 @@ angular
                           snapshot.val()[thought].thought,
                           snapshot.val()[thought].sender,
                           snapshot.val()[thought].likers,
+                          comments,
                           thought,
                           likes);
             }
@@ -238,8 +242,11 @@ angular
       var thought = snapshot.val();
       var likes = 0;
       if (thought.likes) {
-
         likes = thought.likes;
+      }
+      var comments = 0;
+      if (thought.comments) {
+          comments = Object.keys(thought.comments).length;
       }
       var liked = false;
       var likerKey;
@@ -259,7 +266,7 @@ angular
       '<div>'+
         getLikeHTML(liked, likes, key, likerKey)+
         '<br><i class="fa fa-comment" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="closeWndr()"></i>'+
-      '</div>'+
+      '<span>(' + '<div class="inline">' + comments + '</div>)</span></div>' +
       '<div id="comments'+key+'" class="comments"></div>'+
       '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
       '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
@@ -289,7 +296,7 @@ angular
     }
     return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
   }
-  function addMarker(latlng, icon, map , animation, thoughts, sender, likers, key, likes) {
+  function addMarker(latlng, icon, map , animation, thoughts, sender, likers, comments, key, likes) {
 
     var liked = false;
     var likerKey;
@@ -306,7 +313,7 @@ angular
                             '"</div>'+
                             '<div>'+
                               getLikeHTML(liked, likes, key, likerKey)+
-                              '<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="detailWndr('+"'"+key+"'"+')"></i>'+
+                              '<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline">' + comments + '</div>)</span>' +
                             '</div></div>';
 
       var compiled = $compile(contentString)($scope);
