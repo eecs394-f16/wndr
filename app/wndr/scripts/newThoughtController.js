@@ -76,4 +76,12 @@ angular
     });
     return thoughtBubble;
     }
+    
+    $scope.updateChar = function() {
+    
+    var characters = $scope.thought.length;
+    //var words = this.value.split(' ').length;
+    document.getElementById('characters').innerHTML = 200 - characters;
+    //document.getElementById('words').value = words;
+    };
   });

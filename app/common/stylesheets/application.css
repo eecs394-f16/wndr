@@ -1,6 +1,5 @@
 .img-full-bck{
   width: 100%;
-
 }
 
 .FBbutton {
@@ -204,4 +203,10 @@ textarea {
   border-width: thin;
   margin: 5px 0;
   border-color: grey;
+}
+
+.charCount {
+  display: inline;
+  color: grey;
+  font-size: small;
 }

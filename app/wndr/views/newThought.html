@@ -18,8 +18,9 @@
                 <li ng-click="setIcon($event, 'poop')">&#x1f4a9</li>
             </ul>
         </div>
-      <textarea id="TextArea" ng-model="thought" ng-keyup="autoExpand($event)" maxlength="200" placeholder="Enter your thoughts here.">
+      <textarea id="TextArea" ng-model="thought" ng-change="updateChar()" ng-keyup="autoExpand($event)" maxlength="200" placeholder="Enter your thoughts here.">
       </textarea>
+      <div class="charCount" id="characters">200</div> <div  class="charCount"> characters left</div>
       <br />
       <input class="submitButton" type="submit" id="submit" value="Share" />
     </form>
