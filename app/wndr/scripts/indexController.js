@@ -270,7 +270,8 @@ angular
       '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span></div>' +
       '<div id="comments'+key+'" class="comments"></div>'+
       '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
-      '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
+      '<textarea id="newComment'+key+'" ng-change="updateChar()" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
+      '<div class="charCount" id="characters">200</div> <div  class="charCount"> characters left</div>'+
       '<input type="submit" class="addComment" style="float: right;" id="submit" value="Comment" />'+'</form>'+
       '</div>';
 
@@ -412,4 +413,12 @@ angular
     listBox.className = "hidden";
     $scope.closeWndr();
   }
+  
+   $scope.updateChar = function() {
+    
+    var characters = $scope.thought.length;
+    //var words = this.value.split(' ').length;
+    document.getElementById('characters').innerHTML = 200 - characters;
+    //document.getElementById('words').value = words;
+    };
 });
