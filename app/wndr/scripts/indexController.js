@@ -5,6 +5,7 @@ angular
     $scope.markers = [];
     $scope.currentPosition = undefined;
     $scope.commentInput = "";
+    $scope.likeCount ;
 
      var mapIcon = function (iconName) {
 
@@ -81,8 +82,7 @@ angular
         $scope.overlay.draw = function() {}; // empty function required
         $scope.overlay.setMap($scope.map);
         $scope.map.addListener('click', function() {
-          $scope.ib.close();
-          $scope.closeWndr();
+          closeAll();
         });
         
         $scope.currentPosition = new google.maps.Marker({
@@ -131,7 +131,7 @@ angular
           var commentElement = document.getElementById('comments'+key);
           var html = "";
             for (var comment in snapshot.val()) {
-                html = html + '<div class="comment">'+snapshot.val()[comment].text+'</div>';
+                html = html + '<div class="comment"><b>'+snapshot.val()[comment].username+'</b> '+snapshot.val()[comment].text+'</div>';
             }
           commentElement.innerHTML = html;
           commentElement.scrollTop = commentElement.scrollHeight;
@@ -140,22 +140,6 @@ angular
         });
     }
 
-    //$scope.addComment = function (key){
-    //  angular.element(document.getElementsByClassName("input")).addClass('hidden');
-    //  var input = angular.element(document.getElementById('newComment'+key));
-    //  if (input.hasClass('hidden')) {
-    //      input.removeClass('hidden');
-    //  } else {
-    //      $scope.submitComment(key);
-    //  }
-    //  input.addClass("comment");
-    //  showComments(key);
-    //  var element = $window.document.getElementById('newComment'+key);
-    //    if(element)
-    //      element.focus();
-    //
-    //};
-
     $scope.submitComment = function (key){
       if ($scope.commentInput === ""){
         return;
@@ -163,14 +147,16 @@ angular
       document.activeElement.blur();
       var commentsId = 'comments' + key;
       var commentElement = document.getElementById(commentsId);
-      commentElement.innerHTML = commentElement.innerHTML + '<div class="comment">'+$scope.commentInput+'</div>';
+      commentElement.innerHTML = commentElement.innerHTML + '<div class="comment"><b>'+localStorage.getItem("username")+'</b> '+$scope.commentInput+'</div>';
+      commentElement.scrollTop = commentElement.scrollHeight;
       postComment($scope.commentInput, key);
       $scope.commentInput = "";
     };
 
     function postComment(inputText, key) {
       var input = {
-        text: inputText
+        text: inputText,
+        username: localStorage.getItem('username')
       };
       var ref = "/thoughts/" + key +"/comments/";
       var newKey = firebase.database().ref(ref).push().key;
@@ -188,27 +174,33 @@ angular
       var iconId = "likeIcon"+ key;
       var likeId = "likes" + key;
       var like = document.getElementById(likeId);
+      var iconEl;
       var icon = angular.element(document.getElementById(iconId));
       var ref = "/thoughts/" + key +"/likes";
       var likers = "/thoughts/" + key +"/likers/";
       var likes = parseInt(like.innerHTML);
       var likerKey = icon.attr('data');
       var updates = {};
+      var iconEls = document.getElementsByClassName(iconId);
+      var likeEls = document.getElementsByClassName(likeId);
 
       if (icon.hasClass('fa-heart')) {
         
         likes = likes - 1;
-        like.innerHTML = likes;
-        icon.removeClass('fa-heart');
-        icon.addClass('fa-heart-o');
+        for (i=0; i<iconEls.length; i++) {
+           iconEl = angular.element(iconEls[i]);
+           iconEl.removeClass('fa-heart');
+           iconEl.addClass('fa-heart-o');
+         }
         firebase.database().ref(likers+likerKey).remove();
       } else{
         
         likes = likes + 1;
-        like.innerHTML = likes;
-        icon.removeClass('fa-heart-o');
-        icon.addClass('fa-heart');
-        
+        for (i=0; i<iconEls.length; i++) {
+          iconEl = angular.element(iconEls[i]);
+          iconEl.removeClass('fa-heart-o');
+          iconEl.addClass('fa-heart');
+        }
         var newKey = firebase.database().ref(likers).push().key;
         icon.attr('data',newKey);
         var refLikers = likers + newKey;
@@ -217,21 +209,27 @@ angular
         };
       }
       
+      for (i=0; i<likeEls.length; i++) {
+        likeEls[i].innerHTML = likes;
+      }
       updates[ref] = parseInt(likes);
       firebase.database().ref().update(updates);
   };
   
   $scope.closeWndr = function () {
-    var listBox = angular.element(document.getElementById('detail-panel'));
-    listBox.addClass('hidden');
+    var listBox = document.getElementById("detail-panel");
+    while (listBox.firstChild) {
+      listBox.removeChild(listBox.firstChild);
+    }
+    angular.element(listBox).addClass("hidden");
   };
   
   $scope.detailWndr = function (key) {
     
-    $scope.ib.close();
-    document.getElementById("floating-panel").className = "hidden";
+    closeAll();
     var ref = "/thoughts/" + key;
     var listBox = document.getElementById('detail-panel');
+    listBox.className = "";
     firebase.database().ref(ref).once('value').then(function (snapshot) {
       var thought = snapshot.val();
       var likes = 0;
@@ -283,9 +281,9 @@ angular
   function getLikeHTML (liked, likes, key, likerKey) {
     
     if (liked) {
-      return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
+      return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
     }
-    return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
+    return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
   }
   function addMarker(latlng, icon, map , animation, thoughts, sender, likers, key, likes) {
 
@@ -393,8 +391,13 @@ angular
   $interval(updatePosition, 60000);
   
   function closeAll() {
+    document.activeElement.blur();
     $scope.ib.close();
-    document.getElementById("floating-panel").className = "hidden";
+    var listBox = document.getElementById("floating-panel");
+    while (listBox.firstChild) {
+      listBox.removeChild(listBox.firstChild);
+    }
+    listBox.className = "hidden";
     $scope.closeWndr();
   }
 });

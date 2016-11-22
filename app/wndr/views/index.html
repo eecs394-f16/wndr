@@ -1,3 +1,5 @@
+
+
 <div ng-controller="indexController"  ng-attr-location="wndr#index">
     <div id="floating-button-list">
         <button class="button button-small button-stable" ng-click="listView()">List View</button>
@@ -8,5 +10,18 @@
     <div id="floating-panel" class="hidden"></div>
     <div id="detail-panel" class="hidden"></div>    
     <div id="map_canvas" style="width:100%;"></div>
-</div>  
+</div>
+<script>
+	document.ontouchmove = function(event){ 
+	 if (!event.elementIsEnabled) {
+        event.preventDefault();
+		}
+	};
+	document.getElementById('detail-panel').ontouchmove = function (event) {
+		event.elementIsEnabled = true;
+	};
+	document.getElementById('floating-panel').ontouchmove = function (event) {
+		event.elementIsEnabled = true;
+	};
+</script>
 
