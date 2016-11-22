@@ -44,14 +44,10 @@ angular
     supersonic.ui.navigationBar.update({
       title: "wndr",
       overrideBackButton: false,
-      //buttons: {
-      //  right: [newListingBtn]
-      //}
     }).then(supersonic.ui.navigationBar.show());
 
     //view initialization
     var init = function () {
-
         supersonic.device.geolocation.getPosition().then( function(position){
         $scope.position = position;
         $scope.initMap();
@@ -171,6 +167,11 @@ angular
               alert('oh no! the database was not updated!');
           }
       });
+      var commentId = 'comments' + key;
+      var commentEls = document.getElementsByClassName(commentId);
+      for (i = 0; i < commentEls.length; i++) {
+          commentEls[i].innerHTML = 0;
+      }
     }
 
     $scope.addLike = function (key) {
@@ -266,7 +267,7 @@ angular
       '<div>'+
         getLikeHTML(liked, likes, key, likerKey)+
         '<br><i class="fa fa-comment" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="closeWndr()"></i>'+
-      '<span>(' + '<div class="inline">' + comments + '</div>)</span></div>' +
+      '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span></div>' +
       '<div id="comments'+key+'" class="comments"></div>'+
       '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
       '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
@@ -313,7 +314,7 @@ angular
                             '"</div>'+
                             '<div>'+
                               getLikeHTML(liked, likes, key, likerKey)+
-                              '<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline">' + comments + '</div>)</span>' +
+                              '<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline comments' + key + '">' + comments + '</div>)</span>' +
                             '</div></div>';
 
       var compiled = $compile(contentString)($scope);
