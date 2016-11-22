@@ -18,7 +18,7 @@
                 <li ng-click="setIcon($event, 'poop')">&#x1f4a9</li>
             </ul>
         </div>
-      <textarea id="TextArea" ng-model="thought" ng-keyup="autoExpand($event)" placeholder="Enter your thoughts here.">
+      <textarea id="TextArea" ng-model="thought" ng-keyup="autoExpand($event)" maxlength="200" placeholder="Enter your thoughts here.">
       </textarea>
       <br />
       <input class="submitButton" type="submit" id="submit" value="Share" />

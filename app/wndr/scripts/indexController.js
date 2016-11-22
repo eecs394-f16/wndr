@@ -84,7 +84,7 @@ angular
         $scope.map.addListener('click', function() {
           closeAll();
         });
-        
+
         $scope.currentPosition = new google.maps.Marker({
                         position: latlng,
                         icon: icons.red_flag,
@@ -108,7 +108,7 @@ angular
                 var latlng = new google.maps.LatLng(snapshot.val()[thought].lat, snapshot.val()[thought].lng);
                 var likes = 0;
                 if (snapshot.val()[thought].likes) {
-                  
+
                   likes = snapshot.val()[thought].likes;
                 }
                 addMarker(latlng,
@@ -168,9 +168,9 @@ angular
           }
       });
     }
-    
+
     $scope.addLike = function (key) {
-      
+
       var iconId = "likeIcon"+ key;
       var likeId = "likes" + key;
       var like = document.getElementById(likeId);
@@ -185,7 +185,7 @@ angular
       var likeEls = document.getElementsByClassName(likeId);
 
       if (icon.hasClass('fa-heart')) {
-        
+
         likes = likes - 1;
         for (i=0; i<iconEls.length; i++) {
            iconEl = angular.element(iconEls[i]);
@@ -194,13 +194,20 @@ angular
          }
         firebase.database().ref(likers+likerKey).remove();
       } else{
-        
+
         likes = likes + 1;
+<<<<<<< HEAD
         for (i=0; i<iconEls.length; i++) {
           iconEl = angular.element(iconEls[i]);
           iconEl.removeClass('fa-heart-o');
           iconEl.addClass('fa-heart');
         }
+=======
+        like.innerHTML = likes;
+        icon.removeClass('fa-heart-o');
+        icon.addClass('fa-heart');
+
+>>>>>>> origin/master
         var newKey = firebase.database().ref(likers).push().key;
         icon.attr('data',newKey);
         var refLikers = likers + newKey;
@@ -208,14 +215,18 @@ angular
           uid: localStorage.getItem('userId')
         };
       }
+<<<<<<< HEAD
       
       for (i=0; i<likeEls.length; i++) {
         likeEls[i].innerHTML = likes;
       }
+=======
+
+>>>>>>> origin/master
       updates[ref] = parseInt(likes);
       firebase.database().ref().update(updates);
   };
-  
+
   $scope.closeWndr = function () {
     var listBox = document.getElementById("detail-panel");
     while (listBox.firstChild) {
@@ -223,10 +234,16 @@ angular
     }
     angular.element(listBox).addClass("hidden");
   };
-  
+
   $scope.detailWndr = function (key) {
+<<<<<<< HEAD
     
     closeAll();
+=======
+
+    $scope.ib.close();
+    document.getElementById("floating-panel").className = "hidden";
+>>>>>>> origin/master
     var ref = "/thoughts/" + key;
     var listBox = document.getElementById('detail-panel');
     listBox.className = "";
@@ -234,7 +251,7 @@ angular
       var thought = snapshot.val();
       var likes = 0;
       if (thought.likes) {
-        
+
         likes = thought.likes;
       }
       var liked = false;
@@ -258,7 +275,7 @@ angular
       '</div>'+
       '<div id="comments'+key+'" class="comments"></div>'+
       '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
-      '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" ng-model="commentInput" placeholder="Insert comment here"/>'+
+      '<textarea id="newComment'+key+'" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
       '<input type="submit" class="addComment" style="float: right;" id="submit" value="Comment" />'+'</form>'+
       '</div>';
 
@@ -279,7 +296,7 @@ angular
   };
 
   function getLikeHTML (liked, likes, key, likerKey) {
-    
+
     if (liked) {
       return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
     }
@@ -346,7 +363,7 @@ angular
               thoughtBubble.key,
               0);
   });
-  
+
   steroids.tabBar.on('didchange', function() {
     supersonic.device.geolocation.getPosition().then( function(position){
       var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
@@ -373,15 +390,15 @@ angular
       listBox.removeChild(listBox.firstChild);
     }
     for (var j=0; j < compiledList.length; j++) {
-      
+
       listBox.appendChild(compiledList[j]);
     }
   };
-  
+
   $scope.mapView = function() {
     closeAll();
   };
-  
+
   var updatePosition = function () {
       supersonic.device.geolocation.getPosition().then(function (position) {
           var LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -389,7 +406,7 @@ angular
       });
   };
   $interval(updatePosition, 60000);
-  
+
   function closeAll() {
     document.activeElement.blur();
     $scope.ib.close();
