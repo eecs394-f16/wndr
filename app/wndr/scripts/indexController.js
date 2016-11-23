@@ -367,6 +367,8 @@ angular
 
   $scope.listView = function() {
     closeAll();
+    angular.element(document.getElementById('floating-button-list')).addClass('hidden');
+    angular.element(document.getElementById('floating-button-map')).removeClass('hidden');
     var listBox = document.getElementById('floating-panel');
     while (listBox.firstChild) {
       listBox.removeChild(listBox.firstChild);
@@ -431,6 +433,8 @@ angular
 
   $scope.mapView = function() {
     closeAll();
+    angular.element(document.getElementById('floating-button-list')).removeClass('hidden');
+    angular.element(document.getElementById('floating-button-map')).addClass('hidden');
   };
 
   var updatePosition = function () {
