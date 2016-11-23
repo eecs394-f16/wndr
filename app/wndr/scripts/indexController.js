@@ -65,11 +65,55 @@ angular
             zoomControl: false,
             mapTypeControl: false,
             zoom: 18,
-            center: latlng,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+            center: latlng
+            //mapTypeId: google.maps.MapTypeId.ROADMAP
         };
-
+        
+        var styledMapType = new google.maps.StyledMapType(
+          [{
+            "featureType":"landscape.natural",
+            "elementType":"geometry.fill",
+            "stylers":[
+                       {"visibility":"on"},
+                       {"color":"#e0efef"}]
+          },
+          {
+            "featureType":"poi",
+            "elementType":"geometry.fill",
+            "stylers":[
+                       {"visibility":"on"},
+                       {"hue":"#1900ff"},
+                       {"color":"#c0e8e8"}]
+          },
+          {
+            "featureType":"road",
+            "elementType":"geometry",
+            "stylers":[
+                       {"lightness":100},
+                       {"visibility":"simplified"}]
+            },
+            {
+              "featureType":"road",
+              "elementType":"labels",
+              "stylers":[
+                         {"visibility":"off"}]
+            },
+            {
+              "featureType":"transit.line",
+              "elementType":"geometry",
+              "stylers":[{"visibility":"on"},
+                         {"lightness":700}]
+            },
+            {
+              "featureType":"water",
+              "elementType":"all",
+              "stylers":[{"color":"#7dcdcd"}]
+            }]
+        );
+        
         var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+        map.mapTypes.set('styled_map', styledMapType);
+        map.setMapTypeId('styled_map');
         $scope.map = map;
         google.maps.event.addListener(map, 'bounds_changed', function() {
             $scope.bounds = map.getBounds();
