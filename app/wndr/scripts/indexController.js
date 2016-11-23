@@ -79,6 +79,8 @@ angular
         $scope.overlay.setMap($scope.map);
         $scope.map.addListener('click', function() {
           closeAll();
+          document.getElementById("floating-button-list").className = "";
+          document.getElementById("floating-button-map").className = "hidden";
         });
 
         $scope.currentPosition = new google.maps.Marker({
