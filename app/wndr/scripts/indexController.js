@@ -114,12 +114,7 @@ angular
                           mapIcon(snapshot.val()[thought].icon),
                           $scope.map,
                           google.maps.Animation.DROP,
-                          snapshot.val()[thought].thought,
-                          snapshot.val()[thought].sender,
-                          snapshot.val()[thought].likers,
-                          comments,
-                          thought,
-                          likes);
+                          thought);
             }
         });
     };
@@ -298,32 +293,8 @@ angular
     }
     return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
   }
-  function addMarker(latlng, icon, map , animation, thoughts, sender, likers, comments, key, likes) {
+  function addMarker(latlng, icon, map , animation, key) {
 
-    var liked = false;
-    var likerKey;
-    angular.forEach(likers, function(liker,key) {
-      if (liker.uid === localStorage.getItem('userId')) {
-        liked = true;
-       likerKey = key;
-      }
-    });
-      var contentString = '<div id="content">'+
-                            '<img src="'+icon.url+'" class="avatar">'+
-                            '<span style="display : inline;">  '+sender+'</span>'+
-                            '<div id="info-thoughts">"'+thoughts+
-                            '"</div>'+
-                            '<div>'+
-                              getLikeHTML(liked, likes, key, likerKey)+
-                              '<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline comments' + key + '">' + comments + '</div>)</span>' +
-                            '</div></div>';
-
-      var compiled = $compile(contentString)($scope);
-
-      var options = {
-                      content: compiled[0],
-                      disableAutoPan : true
-                    };
       var result = new google.maps.Marker({
                       position: latlng,
                       icon: icon,
@@ -332,15 +303,45 @@ angular
                       }).addListener('click', function () {
                         closeAll();
                         $scope.commentInput = "";
-                        $scope.ib.setOptions(options);
-                        $scope.ib.open(map,this);
-                        map.panTo(latlng);
+                        $scope.updateMarker(key, map, latlng, this);
                       });
-      result.contentHTML = contentString;
+      result.key = key;
       result.position = latlng;
       $scope.markers.push(result);
       return result;
   }
+  
+  $scope.updateMarker= function (key, map, latlng, marker) {
+
+    firebase.database().ref('/thoughts/'+key).once('value').then(function (snapshot) {
+         
+              var thought = snapshot.val();
+              var liked = false;
+              var likerKey;
+              angular.forEach(thought.likers, function(liker,key) {
+                if (liker.uid === localStorage.getItem('userId')) {
+                  liked = true;
+                 likerKey = key;
+                }
+              });
+              var likes = 0;
+              if (thought.likes) { likes = thought.likes;}
+              var comments = 0;
+              if (thought.comments) {
+                  comments = Object.keys(thought.comments).length;
+              }
+              var icon = mapIcon(thought.icon);
+              var likeHtml = getLikeHTML(liked, likes, snapshot.key, likerKey);
+              var contentString = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+thought.sender+'</span> <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+likeHtml+'<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + snapshot.key + "'" + ')"></i><span>(' + '<div class="inline comments' + snapshot.key + '">' + comments+ '</div>)</span></div></div>';
+              var compiled = $compile(contentString)($scope);
+              $scope.ib.setOptions({
+                content: compiled[0],
+                disableAutoPan : true
+              });
+              $scope.ib.open(map,marker);
+              map.panTo(latlng);
+            });
+  };
 
   supersonic.data.channel('addMarker').subscribe( function(thoughtBubble) {
     supersonic.device.geolocation.getPosition().then( function(position){
@@ -353,11 +354,7 @@ angular
               mapIcon(thoughtBubble.icon),
               $scope.map,
               google.maps.Animation.DROP,
-              thoughtBubble.thought,
-              thoughtBubble.sender,
-              undefined,
-              thoughtBubble.key,
-              0);
+              thoughtBubble.key);
   });
 
   steroids.tabBar.on('didchange', function() {
@@ -370,26 +367,67 @@ angular
 
   $scope.listView = function() {
     closeAll();
-    document.getElementById("floating-panel").className = "";
-    var markers = $scope.markers;
-    var HTML = "";
-    for (var i=0; i < markers.length; i++) {
-
-      if(  $scope.bounds.contains(markers[i].position) ){
-
-         HTML = HTML + markers[i].contentHTML;
-      }
-    }
-    var compiledList = $compile(HTML)($scope);
     var listBox = document.getElementById('floating-panel');
     while (listBox.firstChild) {
       listBox.removeChild(listBox.firstChild);
     }
-    for (var j=0; j < compiledList.length; j++) {
+    var markers = $scope.markers;
+    var key;
+    var keys = [];
+    var promises = [];
+    angular.forEach (markers, function(marker) {
+       if( $scope.bounds.contains(marker.position) ){
 
-      listBox.appendChild(compiledList[j]);
-    }
+         key = marker.key;
+         keys.push(key);
+         promises.push(key);
+      }
+    });
+    $q.all(promises).then(function () {
+      updateList(keys);
+      });
   };
+  
+  function updateList(keys) {
+    
+    var listBox = document.getElementById('floating-panel');
+    var promises = [];
+    angular.forEach (keys, function(key) {
+      firebase.database().ref('/thoughts/'+key).once('value').then(function (snapshot) {
+         
+          var thought = snapshot.val();
+          var liked = false;
+          var likerKey;
+          angular.forEach(thought.likers, function(liker,key) {
+            if (liker.uid === localStorage.getItem('userId')) {
+              liked = true;
+             likerKey = key;
+            }
+          });
+          var likes = 0;
+          if (thought.likes) { likes = thought.likes;}
+          var comments = 0;
+          if (thought.comments) {
+              comments = Object.keys(thought.comments).length;
+          }
+          var icon = mapIcon(thought.icon);
+          var likeHtml = getLikeHTML(liked, likes, key, likerKey);
+          var HTML = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+thought.sender+'</span> <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+likeHtml+'<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline comments' + key + '">' + comments+ '</div>)</span></div></div>';
+          var compiledList = $compile(HTML)($scope);
+          var promises2 = [];
+          angular.forEach (compiledList, function(compiledEl) {
+            promises2.push(compiledEl);
+            listBox.appendChild(compiledEl);
+          });
+          $q.all(promises2).then(function () {
+            promises.push(key);
+            });
+     });
+    });
+    $q.all(promises).then(function () {
+      listBox.className = "";
+    });
+  }
 
   $scope.mapView = function() {
     closeAll();
