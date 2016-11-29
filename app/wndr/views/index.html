@@ -10,6 +10,31 @@
     <div id="floating-panel" class="hidden"></div>
     <div id="detail-panel" class="hidden"></div>    
     <div id="map_canvas" style="width:100%;"></div>
+	<div id="new_wndr" class="hidden">
+		<div class="row row-center">
+			<div class="col col-offset-10 col-80">
+			  <form novalidate ng-submit="getInput()">
+				  <div id="emojiContainer">
+					  <ul>
+						  <li ng-click="setIcon($event, 'smiling')">&#x1f603</li>
+						  <li ng-click="setIcon($event, 'thinking')">&#x1f914</li>
+						  <li ng-click="setIcon($event, 'tongueOut')">&#x1f61c</li>
+						  <li ng-click="setIcon($event, 'sad')">&#x2639&#xfe0f</li>
+						  <li ng-click="setIcon($event, 'angry')">&#x1f621</li>
+						  <li ng-click="setIcon($event, 'heart')">&#x2764</li>
+						  <li ng-click="setIcon($event, 'poop')">&#x1f4a9</li>
+					  </ul>
+				  </div>
+				<textarea id="TextArea" ng-model="thought" ng-change="updateCharWndr(')" ng-keyup="autoExpand($event)" maxlength="200" placeholder="Enter your thoughts here.">
+				</textarea>
+				<div class="charCount" id="charactersWndr">200</div> <div  class="charCount"> characters left</div>
+				<br />
+				<input class="submitButton" type="submit" id="submit" value="Share" />
+			  </form>
+			</div>
+		</div>
+	</div>
+	<div class='new-wndr'><img class='new-wndr-button' id='background-img' src='/img/newWndr.png' ng-click="newWndr()"/></div>
 </div>
 <script>
 	document.ontouchmove = function(event){ 

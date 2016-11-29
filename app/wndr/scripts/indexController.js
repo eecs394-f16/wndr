@@ -6,6 +6,10 @@ angular
     $scope.currentPosition = undefined;
     $scope.commentInput = "";
     $scope.likeCount = 0;
+    $scope.iconName = "";
+    $scope.selected = undefined;
+    $scope.thought = "";
+    steroids.tabBar.hide();
 
      var mapIcon = function (iconName) {
 
@@ -57,7 +61,8 @@ angular
     //Map initialization
     $scope.initMap = function() {
 
-        $scope.ib = new google.maps.InfoWindow();
+        var infoWindow = new google.maps.InfoWindow();
+        $scope.ib = infoWindow;
         document.getElementById('map_canvas').style.height = window.innerHeight + "px";
         var latlng = new google.maps.LatLng($scope.position.coords.latitude, $scope.position.coords.longitude);
 
@@ -66,7 +71,6 @@ angular
             mapTypeControl: false,
             zoom: 18,
             center: latlng
-            //mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         
         var styledMapType = new google.maps.StyledMapType(
@@ -125,6 +129,27 @@ angular
           closeAll();
           document.getElementById("floating-button-list").className = "";
           document.getElementById("floating-button-map").className = "hidden";
+        });
+        google.maps.event.addListener(infoWindow, 'domready', function() {
+
+        // Reference to the DIV which receives the contents of the infowindow using jQuery
+        var iwOuter = $('.gm-style-iw');
+  
+        /* The DIV we want to change is above the .gm-style-iw DIV.
+         * So, we use jQuery and create a iwBackground variable,
+         * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
+         */
+        var iwBackground = iwOuter.prev();
+  
+        // Remove the background shadow DIV
+        iwBackground.children(':nth-child(2)').css({'display' : 'none'});
+  
+        // Remove the white background DIV
+        iwBackground.children(':nth-child(4)').css({'display' : 'none'});
+        //iwOuter.parent().parent().css({right: '115px'});
+        //iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'right: 76px !important;';});
+        //iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'right: 76px !important;';});
+  
         });
 
         $scope.currentPosition = new google.maps.Marker({
@@ -307,8 +332,8 @@ angular
       '"</div>'+
       '<div>'+
         getLikeHTML(liked, likes, key, likerKey)+
-        '<br><i class="fa fa-comment" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="closeWndr()"></i>'+
-      '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span></div>' +
+      '<div class="inline-right" ><i class="fa fa-comment" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="closeWndr()"></i>'+
+      '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span></div></div>' +
       '<div id="comments'+key+'" class="comments"></div>'+
       '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
       '<textarea id="newComment'+key+'" ng-change="updateChar()" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
@@ -335,9 +360,9 @@ angular
   function getLikeHTML (liked, likes, key, likerKey) {
 
     if (liked) {
-      return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
+      return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
     }
-    return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div> likes)</span></div>';
+    return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
   }
   function addMarker(latlng, icon, map , animation, key) {
 
@@ -378,7 +403,12 @@ angular
               }
               var icon = mapIcon(thought.icon);
               var likeHtml = getLikeHTML(liked, likes, snapshot.key, likerKey);
-              var contentString = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+thought.sender+'</span> <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+likeHtml+'<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + snapshot.key + "'" + ')"></i><span>(' + '<div class="inline comments' + snapshot.key + '">' + comments+ '</div>)</span></div></div>';
+              var contentString = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
+                                    thought.sender+'</span>'+
+                                    ' <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+
+                                    likeHtml+
+                                    '<div class="inline-right" ><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + snapshot.key + "'" + ')"></i><span>('+
+                                    '<div class="inline comments' + snapshot.key + '">' + comments+ '</div>)</span></div></div></div>';
               var compiled = $compile(contentString)($scope);
               $scope.ib.setOptions({
                 content: compiled[0],
@@ -388,20 +418,6 @@ angular
               map.panTo(latlng);
             });
   };
-
-  supersonic.data.channel('addMarker').subscribe( function(thoughtBubble) {
-    supersonic.device.geolocation.getPosition().then( function(position){
-      var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
-      $scope.map.panTo(LatLng);
-      $scope.currentPosition.setPosition(LatLng);
-    });
-    var latlng = new google.maps.LatLng(thoughtBubble.lat, thoughtBubble.lng);
-    addMarker(latlng,
-              mapIcon(thoughtBubble.icon),
-              $scope.map,
-              google.maps.Animation.DROP,
-              thoughtBubble.key);
-  });
 
   steroids.tabBar.on('didchange', function() {
     supersonic.device.geolocation.getPosition().then( function(position){
@@ -504,9 +520,93 @@ angular
   
    $scope.updateChar = function() {
     
-    var characters = $scope.thought.length;
+    var characters = $scope.commentInput.length;
     //var words = this.value.split(' ').length;
     document.getElementById('characters').innerHTML = 200 - characters;
     //document.getElementById('words').value = words;
+    };
+    
+    $scope.updateCharWndr = function() {
+    
+    var characters = $scope.thought.length;
+    //var words = this.value.split(' ').length;
+    document.getElementById('charactersWndr').innerHTML = 200 - characters;
+    //document.getElementById('words').value = words;
+    };
+    
+    $scope.setIcon = function($event, icon) {
+      
+      if ($scope.selected !== undefined ) {
+        $scope.selected.removeClass('selected');
+      }
+      var el = (function(){
+                if ($event.currentTarget.nodeName === 'I') {
+                   return angular.element($event.currentTarget).parent(); // get li
+                } else {
+                   return angular.element($event.currentTarget);          // is li
+                }
+               })();
+      el.addClass('selected');
+      $scope.selected = el;
+      $scope.iconName = icon;
+    };
+    
+    $scope.autoExpand = function(e) {
+      var element = typeof e === 'object' ? e.target : document.getElementById(e);
+      var scrollHeight = element.scrollHeight;
+      element.style.height =  scrollHeight + "px";    
+   };
+   
+   $scope.newWndr = function() {
+    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
+    if (wndrOverlay.hasClass('hidden')) {
+       wndrOverlay.removeClass('hidden');
+    } else {
+      wndrOverlay.addClass('hidden');
+    }
+   };
+   
+   $scope.getInput = function() {
+
+      document.activeElement.blur();
+      if ($scope.iconName === "") {
+        supersonic.ui.dialog.alert("Please select an Icon!");
+        return;
+      }
+      if ($scope.thought === "") {
+        supersonic.ui.dialog.alert("Please input some text for a wndr!");
+        return;
+      }
+      $scope.selected.removeClass('selected');
+      supersonic.device.geolocation.getPosition().then( function(position){
+
+        var thoughtBubble = {
+        thought: $scope.thought,
+        sender: localStorage.getItem('username'),
+        userId: localStorage.getItem('userId'),
+        icon: $scope.iconName,
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        likes: 0
+        };
+        
+        thoughtBubble = addToFirebase(thoughtBubble);
+        $scope.iconName = "";
+        $scope.selected = undefined;
+        $scope.thought = "";
+        
+        var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
+        $scope.map.panTo(LatLng);
+        $scope.currentPosition.setPosition(LatLng);
+        
+        addMarker(latlng,
+              mapIcon(thoughtBubble.icon),
+              $scope.map,
+              google.maps.Animation.DROP,
+              thoughtBubble.key);
+        
+        var wndrOverlay = angular.element(document.getElementById('new_wndr'));
+        wndrOverlay.addClass('hidden');
+      });
     };
 });

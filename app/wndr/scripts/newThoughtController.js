@@ -35,6 +35,7 @@ angular
         var thoughtBubble = {
         thought: $scope.thought,
         sender: localStorage.getItem('username'),
+        userId: localStorage.getItem('userId'),
         icon: $scope.iconName,
         lat: $scope.position.coords.latitude,
         lng: $scope.position.coords.longitude,
