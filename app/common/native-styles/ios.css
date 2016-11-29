@@ -4,14 +4,14 @@
  ***********************************************************/
 
 navigation-bar {
-  background-color: #00B5FF;
-  color: #ffffff;
+  background-color: #ffffff;
 }
 
 navigation-bar title {
-  color: #ffffff;
-  font-size: 18px;
-  font-weight: 600;
+  color: #000000;
+  font-family: 'Lato', sans-serif;
+  font-size: 48px;
+  font-weight: 300;
 }
 
 navigation-bar button, navigation-bar back-bar-button {
