@@ -5,25 +5,25 @@ var wndr = angular.module('wndr', [
 
 wndr.constant('icons', {
     heart: {
-        url: "/emojis/heavy-black-heart.png",
+        url: "/emojis/2764.svg",
         scaledSize: new google.maps.Size(30, 30), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0)
     },
     angry: {
-        url: "/emojis/Very_Angry_Emoji.png",
+        url: "/emojis/1f621.svg",
         scaledSize: new google.maps.Size(30, 30), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0)
     },
     sad: {
-        url: "/emojis/Very_sad_emoji_icon_png.png",
+        url: "/emojis/2639.svg",
         scaledSize: new google.maps.Size(30, 30), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0)
     },
     tongueOut: {
-        url: "/emojis/Tongue_Out_Emoji_with_Winking_Eye.png",
+        url: "/emojis/1f61c.svg",
         scaledSize: new google.maps.Size(30, 30), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0)
@@ -35,13 +35,13 @@ wndr.constant('icons', {
         anchor: new google.maps.Point(0, 0)
     },
     thinking: {
-        url: "/emojis/Thinking_Face_Emoji.png",
+        url: "/emojis/1f914.svg",
         scaledSize: new google.maps.Size(30, 30), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0)
     },
     smiling: {
-        url: "/emojis/Smiling_Emoji_with_Eyes_Opened.png",
+        url: "/emojis/1f600.svg",
         scaledSize: new google.maps.Size(30, 30), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0)
@@ -53,7 +53,7 @@ wndr.constant('icons', {
         anchor: new google.maps.Point(0, 0) // anchor
     },
     poop: {
-        url: "/emojis/Poop_Emoji.png",
+        url: "/emojis/1f4a9.svg",
         scaledSize: new google.maps.Size(30, 30), // scaled size
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
