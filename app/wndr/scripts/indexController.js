@@ -566,8 +566,7 @@ angular
     document.getElementById('characters').innerHTML = 200 - characters;
     //document.getElementById('words').value = words;
     };
-
-    
+  
   $scope.updateCharWndr = function() {
   
   var characters = $scope.thought.length;
@@ -594,6 +593,8 @@ angular
   };
   
   $scope.newWndr = function() {
+   closeAll();
+   $scope.toggleMapView();
    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
    if (wndrOverlay.hasClass('hidden')) {
       wndrOverlay.removeClass('hidden');
@@ -614,15 +615,6 @@ angular
     });
     return thoughtBubble;
     }
-
-   $scope.newWndr = function() {
-    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
-    if (wndrOverlay.hasClass('hidden')) {
-       wndrOverlay.removeClass('hidden');
-    } else {
-      wndrOverlay.addClass('hidden');
-    }
-   };
 
    $scope.getInput = function() {
 
