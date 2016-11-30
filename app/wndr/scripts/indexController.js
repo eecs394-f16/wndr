@@ -233,7 +233,7 @@ angular
           var commentElement = document.getElementById('comments'+key);
           var html = "";
             for (var comment in snapshot.val()) {
-                html = html + '<div class="comment"><b>'+snapshot.val()[comment].username+'</b> '+snapshot.val()[comment].text+'</div>';
+                html = html + '<div class="commentUser">'+snapshot.val()[comment].username+'</div><div class="commentText">'+snapshot.val()[comment].text+'</div>';
             }
           commentElement.innerHTML = html;
           commentElement.scrollTop = commentElement.scrollHeight;
@@ -249,7 +249,7 @@ angular
       document.activeElement.blur();
       var commentsId = 'comments' + key;
       var commentElement = document.getElementById(commentsId);
-      commentElement.innerHTML = commentElement.innerHTML + '<div class="comment"><b>'+localStorage.getItem("username")+'</b> '+$scope.commentInput+'</div>';
+      commentElement.innerHTML = commentElement.innerHTML + '<div class="commentUser">'+localStorage.getItem("username")+'</div><div class="commentText">'+$scope.commentInput+'</div>';
       commentElement.scrollTop = commentElement.scrollHeight;
       postComment($scope.commentInput, key);
       $scope.commentInput = "";
@@ -378,15 +378,20 @@ angular
       '<span style="display : inline;">  '+thought.sender+'</span>'+
       '<div id="info-thoughts">"'+thought.thought+
       '"</div>'+
-      '<div>'+
-        getLikeHTML(liked, likes, key, likerKey)+
-      '<div class="inline-right" ><i class="fa fa-comment" style="font-size: 15px; padding: 0px 10px; margin : 5px;" ng-click="closeWndr()"></i>'+
-      '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span></div></div>' +
-      '<div id="comments'+key+'" class="comments"></div>'+
-      '<form novalidate ng-submit="submitComment('+"'"+key+"'"+')">'+
-      '<textarea id="newComment'+key+'" ng-change="updateChar()" class="input" rows="4" cols="50" maxlength="200" ng-model="commentInput" placeholder="Insert comment here"/>'+
-      '<div class="charCount" id="characters">200</div> <div  class="charCount"> characters left</div>'+
-      '<input type="submit" class="addComment" style="float: right;" id="submit" value="Comment" />'+'</form>'+
+      '<div><div style="width: 100%">' +
+      getLikeHTML(liked, likes, key, likerKey) +
+      '<div style="float: right" class="iconButton">' +
+      '<i class="fa fa-comment" ng-click="closeWndr()"></i>' +
+      '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span>' +
+      '</div></div>' +
+      '<form novalidate style="width: 100%;" ng-submit="submitComment(' + "'" + key + "'" + ')">' +
+      '<div style="width: 100%"; text-align:center"><textarea id="newComment' + key + '" ng-change="updateChar()" class="newCommentText" rows="1" cols="50" maxlength="200" ng-model="commentInput" placeholder="Enter comment here."/>' +
+      '<input type="submit" class="addComment" id="submit" value="Comment" /></div>' +
+      '</form>' +
+      '<div class="charCountContainer"><div class="charCount">' +
+      '<div id="characters">200</div><div> characters left</div>' +
+      '</div></div></div>' +
+      '<div id="comments' + key + '" class="comments"></div>' +
       '</div>';
 
       var compiledList = $compile(contentString)($scope);
@@ -408,9 +413,9 @@ angular
   function getLikeHTML (liked, likes, key, likerKey) {
 
     if (liked) {
-      return '<div class="likeButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
+      return '<div class="iconButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart likeIcon'+key+'" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
     }
-    return '<div class="likeButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" style="font-size: 15px; padding: 10px;" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
+    return '<div class="iconButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
   }
   function addMarker(latlng, icon, map , animation, key) {
 

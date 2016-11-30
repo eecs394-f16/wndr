@@ -19,20 +19,50 @@
   font-weight: 600;
 }
 
-textarea {
+.newWndrText {
   font-family: 'Lato', sans-serif;
   width: 100%;
   height: auto;
   padding: 10px;
   border: 1px solid #464646;
   border-radius: 0;
-  outline: none;
   position: relative;
   z-index: 10;
   border-shadow: none;
   background: transparent;
   line-height: 1.2;
   color: #333333;
+  -webkit-appearance: none;
+}
+
+.newCommentText {
+  font-family: 'Lato', sans-serif;
+  width: 75%;
+  height: auto;
+  padding: 5px;
+  border: 1px solid #464646;
+  border-radius: 0;
+  outline: none;
+  z-index: 10;
+  display: inline;
+  background: transparent;
+  line-height: 1.2;
+  color: #333333;
+  -webkit-appearance: none;
+}
+
+.addComment{
+  margin-left: 1%;
+  background-color: #81d6d5;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  width: 23%;
+  border: none;
+  color: white;
+  text-align: center;
+  moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
 }
 
 #emojiContainer{
@@ -68,27 +98,8 @@ textarea {
   text-align: center;
 }
 
-.addComment{
-  background-color: #00B5FF;
-  border: none;
-  color: white;
-  padding: 10px 10px;
-  text-align: center;
-  moz-border-radius: 15px;
-  -webkit-border-radius: 15px;
-  border-radius: 5px;
-}
-
 .selected {
   background-color: #878281;
-}
-
-.comment{
-  margin: 0px 0px 5px 10px;
-  width: 95%;
-  padding: 5px;
-  border: none;
-  box-shadow: 0px 2px 2px -2px grey;
 }
 
 .expandButton {
@@ -108,11 +119,20 @@ textarea {
   padding: 0px;
 }
 
-.likeButton {
-  height: auto;
-  display : inline;
-  padding-top : 10px;
-  margin : 5px;  
+.iconButton {
+  display : inline-block;
+  padding: 0 5px;
+  font-size: 15px;
+  color: #464646;
+}
+
+.iconButton i {
+  padding: 10px;
+}
+
+.inline-right {
+  display: inline;
+  float: right;
 }
 
 #floating-panel {
@@ -175,18 +195,21 @@ textarea {
   display: inline;
  }
  
-.comments{
+.comments {
   max-height: 110px;
   overflow-y: scroll;
-  font-family: 'Roboto','sans-serif';
-  line-height: 30px;
+  font-family: 'Lato', sans-serif;
+  width: 100%;
+  color: #464646;
 }
-
-.input {
-  border: solid;
-  border-width: thin;
-  margin: 5px 0;
-  border-color: grey;
+.commentUser {
+  width: 100%;
+  margin-bottom: -10px;
+  font-size: 18px;
+}
+.commentText {
+  font-size: 14px;
+  width: 100%;
 }
 
 .charCountContainer {
@@ -222,11 +245,6 @@ textarea {
    box-shadow: 0 1px 6px rgba(178, 178, 178, 0.6);
    border: hidden;
    border-radius: 10px 10px 10px 10px;
-}
-
-.inline-right {
-  display: inline;
-  float: right;
 }
 
 .new-wndr-button{
