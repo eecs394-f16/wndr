@@ -168,7 +168,6 @@ angular
         });
         google.maps.event.addListener(infoWindow, 'domready', function() {
 
-        // Reference to the DIV which receives the contents of the infowindow using jQuery
         var iwOuter = $('.gm-style-iw');
 
         /* The DIV we want to change is above the .gm-style-iw DIV.
@@ -182,10 +181,6 @@ angular
 
         // Remove the white background DIV
         iwBackground.children(':nth-child(4)').css({'display' : 'none'});
-        //iwOuter.parent().parent().css({right: '115px'});
-        //iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'right: 76px !important;';});
-        //iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'right: 76px !important;';});
-
         });
 
         $scope.currentPosition = new google.maps.Marker({
@@ -576,6 +571,13 @@ angular
   $scope.updateCharWndr = function() {
   
   var characters = $scope.thought.length;
+  //this function is just for developers to easily exit the post wndr page
+  if ($scope.thought === 'Naybro' || $scope.thought === 'naybro' ) {
+    document.activeElement.blur();
+    $scope.newWndr();
+    $scope.thought = "";
+    return;
+  }
   //var words = this.value.split(' ').length;
   document.getElementById('charactersWndr').innerHTML = 200 - characters;
   //document.getElementById('words').value = words;
