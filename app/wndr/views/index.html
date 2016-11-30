@@ -27,7 +27,11 @@
 				  </div>
 				<textarea id="TextArea" ng-model="thought" ng-change="updateCharWndr()" rows="8" maxlength="200" placeholder="Type caption here.">
 				</textarea>
-				<div class="charCount" id="charactersWndr">200</div> <div  class="charCount"> characters left</div>
+                <div class="charCountContainer">
+                    <div class="charCount">
+                        <div id="charactersWndr">200</div> <div> characters left</div>
+                    </div>
+                </div>
 				<br />
 				<input class="submitButton" type="submit" id="submit" value="share" />
 			  </form>

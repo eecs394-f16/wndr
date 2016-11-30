@@ -20,14 +20,19 @@
 }
 
 textarea {
+  font-family: 'Lato', sans-serif;
   width: 100%;
   height: auto;
   padding: 10px;
-  border: outset;
-  border-style: outset;
-  box-shadow: 0px 0px 5px grey;
+  border: 1px solid #464646;
+  border-radius: 0;
+  outline: none;
   position: relative;
   z-index: 10;
+  border-shadow: none;
+  background: transparent;
+  line-height: 1.2;
+  color: #333333;
 }
 
 #emojiContainer{
@@ -208,10 +213,19 @@ textarea {
   border-color: grey;
 }
 
+.charCountContainer {
+  width: 100%;
+  padding-right: 10px;
+  padding-bottom: 12px;
+}
 .charCount {
-  display: inline;
-  color: grey;
+  font-family: 'Lato', sans-serif;
+  float: right;
+  color: #999999;
   font-size: small;
+}
+.charCount div {
+  display: inline;
 }
 
 #new_wndr {
