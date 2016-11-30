@@ -37,7 +37,7 @@
 
 .newCommentText {
   font-family: 'Lato', sans-serif;
-  width: 75%;
+  width: 60%;
   height: auto;
   padding: 5px;
   border: 1px solid #464646;
@@ -56,7 +56,7 @@
   background-color: #81d6d5;
   padding-top: 6px;
   padding-bottom: 6px;
-  width: 23%;
+  width: 30%;
   border: none;
   color: white;
   text-align: center;
@@ -196,7 +196,7 @@
  }
  
 .comments {
-  max-height: 110px;
+  max-height: 200px;
   overflow-y: scroll;
   font-family: 'Lato', sans-serif;
   width: 100%;
