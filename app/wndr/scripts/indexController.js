@@ -69,10 +69,11 @@ angular
         var myOptions = {
             zoomControl: false,
             mapTypeControl: false,
+            clickableIcons: false,
             zoom: 18,
             center: latlng
         };
-        
+
         var styledMapType = new google.maps.StyledMapType(
           [{
             "featureType":"landscape.natural",
@@ -114,7 +115,7 @@ angular
               "stylers":[{"color":"#7dcdcd"}]
             }]
         );
-        
+
         var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
         map.mapTypes.set('styled_map', styledMapType);
         map.setMapTypeId('styled_map');
@@ -134,22 +135,22 @@ angular
 
         // Reference to the DIV which receives the contents of the infowindow using jQuery
         var iwOuter = $('.gm-style-iw');
-  
+
         /* The DIV we want to change is above the .gm-style-iw DIV.
          * So, we use jQuery and create a iwBackground variable,
          * and took advantage of the existing reference to .gm-style-iw for the previous DIV with .prev().
          */
         var iwBackground = iwOuter.prev();
-  
+
         // Remove the background shadow DIV
         iwBackground.children(':nth-child(2)').css({'display' : 'none'});
-  
+
         // Remove the white background DIV
         iwBackground.children(':nth-child(4)').css({'display' : 'none'});
         //iwOuter.parent().parent().css({right: '115px'});
         //iwBackground.children(':nth-child(1)').attr('style', function(i,s){ return s + 'right: 76px !important;';});
         //iwBackground.children(':nth-child(3)').attr('style', function(i,s){ return s + 'right: 76px !important;';});
-  
+
         });
 
         $scope.currentPosition = new google.maps.Marker({
@@ -283,7 +284,7 @@ angular
           uid: localStorage.getItem('userId')
         };
       }
-      
+
       for (i=0; i<likeEls.length; i++) {
         likeEls[i].innerHTML = likes;
       }
@@ -300,7 +301,7 @@ angular
   };
 
   $scope.detailWndr = function (key) {
- 
+
     closeAll();
     var ref = "/thoughts/" + key;
     var listBox = document.getElementById('detail-panel');
@@ -381,11 +382,11 @@ angular
       $scope.markers.push(result);
       return result;
   }
-  
+
   $scope.updateMarker= function (key, map, latlng, marker) {
 
     firebase.database().ref('/thoughts/'+key).once('value').then(function (snapshot) {
-         
+
               var thought = snapshot.val();
               var liked = false;
               var likerKey;
@@ -451,14 +452,14 @@ angular
       updateList(keys);
       });
   };
-  
+
   function updateList(keys) {
-    
+
     var listBox = document.getElementById('floating-panel');
     var promises = [];
     angular.forEach (keys, function(key) {
       firebase.database().ref('/thoughts/'+key).once('value').then(function (snapshot) {
-         
+
           var thought = snapshot.val();
           var liked = false;
           var likerKey;
@@ -517,14 +518,21 @@ angular
     listBox.className = "hidden";
     $scope.closeWndr();
   }
+<<<<<<< HEAD
   
   $scope.updateChar = function() {
     
+=======
+
+   $scope.updateChar = function() {
+
+>>>>>>> origin/master
     var characters = $scope.commentInput.length;
     //var words = this.value.split(' ').length;
     document.getElementById('characters').innerHTML = 200 - characters;
     //document.getElementById('words').value = words;
     };
+<<<<<<< HEAD
     
   $scope.updateCharWndr = function() {
   
@@ -552,10 +560,40 @@ angular
   };
   
   $scope.autoExpand = function(e) {
+=======
+
+    $scope.updateCharWndr = function() {
+
+    var characters = $scope.thought.length;
+    //var words = this.value.split(' ').length;
+    document.getElementById('charactersWndr').innerHTML = 200 - characters;
+    //document.getElementById('words').value = words;
+    };
+
+    $scope.setIcon = function($event, icon) {
+
+      if ($scope.selected !== undefined ) {
+        $scope.selected.removeClass('selected');
+      }
+      var el = (function(){
+                if ($event.currentTarget.nodeName === 'I') {
+                   return angular.element($event.currentTarget).parent(); // get li
+                } else {
+                   return angular.element($event.currentTarget);          // is li
+                }
+               })();
+      el.addClass('selected');
+      $scope.selected = el;
+      $scope.iconName = icon;
+    };
+
+    $scope.autoExpand = function(e) {
+>>>>>>> origin/master
       var element = typeof e === 'object' ? e.target : document.getElementById(e);
       var scrollHeight = element.scrollHeight;
-      element.style.height =  scrollHeight + "px";    
+      element.style.height =  scrollHeight + "px";
    };
+<<<<<<< HEAD
    
   $scope.newWndr = function() {
    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
@@ -580,6 +618,19 @@ angular
     }
     
   $scope.getInput = function() {
+=======
+
+   $scope.newWndr = function() {
+    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
+    if (wndrOverlay.hasClass('hidden')) {
+       wndrOverlay.removeClass('hidden');
+    } else {
+      wndrOverlay.addClass('hidden');
+    }
+   };
+
+   $scope.getInput = function() {
+>>>>>>> origin/master
 
       document.activeElement.blur();
       if ($scope.iconName === "") {
@@ -602,20 +653,27 @@ angular
         lng: position.coords.longitude,
         likes: 0
         };
-        
+
         thoughtBubble = addToFirebase(thoughtBubble);
         $scope.iconName = "";
         $scope.selected = undefined;
         $scope.thought = "";
-        
+
         var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
+<<<<<<< HEAD
                 
         addMarker(LatLng,
+=======
+        $scope.map.panTo(LatLng);
+        $scope.currentPosition.setPosition(LatLng);
+
+        addMarker(latlng,
+>>>>>>> origin/master
               mapIcon(thoughtBubble.icon),
               $scope.map,
               google.maps.Animation.DROP,
               thoughtBubble.key);
-        
+
         var wndrOverlay = angular.element(document.getElementById('new_wndr'));
         wndrOverlay.addClass('hidden');
         
