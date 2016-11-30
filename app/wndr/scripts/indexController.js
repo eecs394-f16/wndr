@@ -531,15 +531,8 @@ angular
     if ($scope.selected !== undefined ) {
       $scope.selected.removeClass('selected');
     }
-    var el = (function(){
-              if ($event.currentTarget.nodeName === 'I') {
-                 return angular.element($event.currentTarget).parent(); // get li
-              } else {
-                 return angular.element($event.currentTarget);          // is li
-              }
-             })();
-    el.addClass('selected');
-    $scope.selected = el;
+    angular.element($event.currentTarget).addClass('selected');
+    $scope.selected = angular.element($event.currentTarget);
     $scope.iconName = icon;
   };
   

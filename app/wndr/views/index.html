@@ -16,13 +16,13 @@
 			  <form novalidate ng-submit="getInput()">
 				  <div id="emojiContainer">
 					  <ul>
-                          <li ng-click="setIcon($event, 'smiling')"><img style="height: 100%;" src="/emojis/1f600.svg" /></li>
-                          <li ng-click="setIcon($event, 'thinking')"><img style="height: 100%;" src="/emojis/1f914.svg" /></li>
-                          <li ng-click="setIcon($event, 'tongueOut')"><img style="height: 100%;" src="/emojis/1f61c.svg" /></li>
-                          <li ng-click="setIcon($event, 'sad')"><img style="height: 100%;" src="/emojis/2639.svg" /></li>
-                          <li ng-click="setIcon($event, 'angry')"><img style="height: 100%;" src="/emojis/1f621.svg" /></li>
-                          <li ng-click="setIcon($event, 'heart')"><img style="height: 100%;" src="/emojis/2764.svg" /></li>
-                          <li ng-click="setIcon($event, 'poop')"><img style="height: 100%;" src="/emojis/1f4a9.svg" /></li>
+                          <li><img style="height: 100%;" src="/emojis/1f600.svg" ng-click="setIcon($event, 'smiling')"/></li>
+                          <li><img style="height: 100%;" src="/emojis/1f914.svg" ng-click="setIcon($event, 'thinking')"/></li>
+                          <li><img style="height: 100%;" src="/emojis/1f61c.svg" ng-click="setIcon($event, 'tongueOut')"/></li>
+                          <li><img style="height: 100%;" src="/emojis/2639.svg" ng-click="setIcon($event, 'sad')"/></li>
+                          <li><img style="height: 100%;" src="/emojis/1f621.svg" ng-click="setIcon($event, 'angry')"/></li>
+                          <li><img style="height: 100%;" src="/emojis/2764.svg" ng-click="setIcon($event, 'heart')"/></li>
+                          <li><img style="height: 100%;" src="/emojis/1f4a9.svg" ng-click="setIcon($event, 'poop')"/></li>
 					  </ul>
 				  </div>
 				<textarea id="TextArea" ng-model="thought" ng-change="updateCharWndr()" rows="8" maxlength="200" placeholder="Type caption here.">
