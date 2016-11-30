@@ -56,3 +56,12 @@ tab-bar-item#person {
 tab-bar-item#newThought {
   background-image: url(icons/newThought.svg);
 }
+
+.listNavButton{
+  margin: 10px;
+  background-image: url(img/listView.png);
+}
+
+.mapNavButton{
+  background-image: url(img/mapView.png);
+}

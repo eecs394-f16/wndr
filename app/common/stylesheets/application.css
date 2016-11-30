@@ -4,7 +4,7 @@
 
 .FBbutton {
     font-family: "Lato", sans-serif;
-    //font-size: 24px;
+    /*font-size: 24px;*/
     position: fixed;
     left: 30%;
     width: 40%;
@@ -117,49 +117,21 @@ textarea {
 
 #floating-panel {
   position: absolute;
-  top: 15%;
-  left: 10%;
-  right: 10%;
-  bottom: 10%;
-  width: 80%;
-  height: 75%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
   overflow: scroll;
   z-index: 5;
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.902);
   padding: 15px;
   border: 1px solid #999;
   text-align: left;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
-  border-radius: 5px;
  }
-
-#floating-button-list {
-  position: absolute;
-  top: 5%;
-  right: 5%;
-  z-index: 5;
-  background-color: #fff;
-  padding: 0;
-  border: 1px solid #999;
-  text-align: center;
-  font-family: 'Roboto','sans-serif';
-  line-height: 30px;
-  border-radius: 5px;
-}
-
-#floating-button-map{
-  position: absolute;
-  top: 5%;
-  left: 5%;
-  z-index: 5;
-  background-color: #fff;
-  padding: 0;
-  border: 1px solid #999;
-  text-align: center;
-  font-family: 'Roboto','sans-serif';
-  line-height: 30px;
-}
 
 #info-thoughts {
   font-size: 20px;
@@ -174,6 +146,10 @@ textarea {
   padding-bottom: 10px;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
+}
+
+.infoContent {
+  width: 270px;
 }
 
 #detail-panel {
@@ -265,4 +241,12 @@ textarea {
   bottom: 0;
   z-index: 10;
   padding: 0;
+}
+
+.hr{
+  margin: 0 5%;
+  width: 90%;
+  border-color: rgb(193, 182, 182);
+  border-width: 1px;
+  border-style: solid;
 }

@@ -35,11 +35,56 @@ angular
         }
      };
 
-    supersonic.ui.navigationBar.update({
-      title: "wndr",
-      overrideBackButton: false,
-    }).then(supersonic.ui.navigationBar.show());
-
+      listButton = new supersonic.ui.NavigationBarButton( {
+        styleClass: 'listNavButton',
+        styleId: 'toggleButton',
+        title: ' ',
+        onTap: function() {
+          $scope.toggleListView();
+        }
+      });
+        
+      supersonic.ui.navigationBar.update({
+        title: "wndr",
+        overrideBackButton: true,
+        buttons: {
+          left: [listButton]
+        }
+      }).then(supersonic.ui.navigationBar.show());
+      
+      $scope.toggleMapView = function () {
+        listButton = new supersonic.ui.NavigationBarButton( {
+        styleClass: 'listNavButton',
+        title: ' ',
+        onTap: function() {
+          $scope.toggleListView();
+        }
+        });
+        supersonic.ui.navigationBar.update({
+          buttons: {
+            left: [listButton]
+          }
+        }).then(function () {
+            $scope.mapView();
+          });
+      };
+      
+      $scope.toggleListView = function () {
+        listButton = new supersonic.ui.NavigationBarButton( {
+        styleClass: 'mapNavButton',
+        title: ' ',
+        onTap: function() {
+          $scope.toggleMapView();
+        }
+        });
+        supersonic.ui.navigationBar.update({
+        buttons: {
+          left: [listButton]
+        }
+        }).then(function() {
+          $scope.listView();
+        });
+      };
     //view initialization
     var init = function () {
         supersonic.device.geolocation.getPosition().then( function(position){
@@ -152,7 +197,7 @@ angular
                           $scope.ib.close();
                           $scope.commentInput = "";
                           var options = {
-                            content: "This is your location",
+                            content: '<div class="infoContent"> This is your location</div>',
                             disableAutoPan : true
                           };
                           $scope.ib.setOptions(options);
@@ -293,6 +338,18 @@ angular
   $scope.detailWndr = function (key) {
 
     closeAll();
+    listButton = new supersonic.ui.NavigationBarButton( {
+        styleClass: 'listNavButton',
+        title: ' ',
+        onTap: function() {
+          $scope.toggleListView();
+        }
+        });
+    supersonic.ui.navigationBar.update({
+      buttons: {
+        left: [listButton]
+      }
+    });
     var ref = "/thoughts/" + key;
     var listBox = document.getElementById('detail-panel');
     listBox.className = "";
@@ -394,7 +451,7 @@ angular
               }
               var icon = mapIcon(thought.icon);
               var likeHtml = getLikeHTML(liked, likes, snapshot.key, likerKey);
-              var contentString = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
+              var contentString = '<div id="content" class="infoContent"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
                                     thought.sender+'</span>'+
                                     ' <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+
                                     likeHtml+
@@ -410,18 +467,8 @@ angular
             });
   };
 
-  steroids.tabBar.on('didchange', function() {
-    supersonic.device.geolocation.getPosition().then( function(position){
-      var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
-      $scope.map.panTo(LatLng);
-      $scope.currentPosition.setPosition(LatLng);
-    });
-  });
-
   $scope.listView = function() {
     closeAll();
-    angular.element(document.getElementById('floating-button-list')).addClass('hidden');
-    angular.element(document.getElementById('floating-button-map')).removeClass('hidden');
     var listBox = document.getElementById('floating-panel');
     while (listBox.firstChild) {
       listBox.removeChild(listBox.firstChild);
@@ -466,8 +513,13 @@ angular
               comments = Object.keys(thought.comments).length;
           }
           var icon = mapIcon(thought.icon);
-          var likeHtml = getLikeHTML(liked, likes, key, likerKey);
-          var HTML = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+thought.sender+'</span> <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+likeHtml+'<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline comments' + key + '">' + comments+ '</div>)</span></div></div>';
+          //var likeHtml = getLikeHTML(liked, likes, key, likerKey);
+          //var HTML = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+thought.sender+'</span> <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+likeHtml+'<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline comments' + key + '">' + comments+ '</div>)</span></div></div>';
+          var HTML =
+          '<div id="content"><div class="row" ng-click="detailWndr(' + "'" + key + "'" + ')">'+
+          '<div class="col col-20"><img style="width: 100%;" src="'+icon.url+'">'+
+          '<div style="text-align: center;">'+thought.sender+'</div></div><div class="col col-80"> <div id="info-thoughts">"'+thought.thought+'"</div></div></div><div class="hr"></div>';
+          
           var compiledList = $compile(HTML)($scope);
           var promises2 = [];
           angular.forEach (compiledList, function(compiledEl) {
@@ -486,8 +538,6 @@ angular
 
   $scope.mapView = function() {
     closeAll();
-    angular.element(document.getElementById('floating-button-list')).removeClass('hidden');
-    angular.element(document.getElementById('floating-button-map')).addClass('hidden');
   };
 
   var updatePosition = function () {
