@@ -518,7 +518,7 @@ angular
     $scope.closeWndr();
   }
   
-   $scope.updateChar = function() {
+  $scope.updateChar = function() {
     
     var characters = $scope.commentInput.length;
     //var words = this.value.split(' ').length;
@@ -526,47 +526,60 @@ angular
     //document.getElementById('words').value = words;
     };
     
-    $scope.updateCharWndr = function() {
+  $scope.updateCharWndr = function() {
+  
+  var characters = $scope.thought.length;
+  //var words = this.value.split(' ').length;
+  document.getElementById('charactersWndr').innerHTML = 200 - characters;
+  //document.getElementById('words').value = words;
+  };
     
-    var characters = $scope.thought.length;
-    //var words = this.value.split(' ').length;
-    document.getElementById('charactersWndr').innerHTML = 200 - characters;
-    //document.getElementById('words').value = words;
-    };
+  $scope.setIcon = function($event, icon) {
     
-    $scope.setIcon = function($event, icon) {
-      
-      if ($scope.selected !== undefined ) {
-        $scope.selected.removeClass('selected');
-      }
-      var el = (function(){
-                if ($event.currentTarget.nodeName === 'I') {
-                   return angular.element($event.currentTarget).parent(); // get li
-                } else {
-                   return angular.element($event.currentTarget);          // is li
-                }
-               })();
-      el.addClass('selected');
-      $scope.selected = el;
-      $scope.iconName = icon;
-    };
-    
-    $scope.autoExpand = function(e) {
+    if ($scope.selected !== undefined ) {
+      $scope.selected.removeClass('selected');
+    }
+    var el = (function(){
+              if ($event.currentTarget.nodeName === 'I') {
+                 return angular.element($event.currentTarget).parent(); // get li
+              } else {
+                 return angular.element($event.currentTarget);          // is li
+              }
+             })();
+    el.addClass('selected');
+    $scope.selected = el;
+    $scope.iconName = icon;
+  };
+  
+  $scope.autoExpand = function(e) {
       var element = typeof e === 'object' ? e.target : document.getElementById(e);
       var scrollHeight = element.scrollHeight;
       element.style.height =  scrollHeight + "px";    
    };
    
-   $scope.newWndr = function() {
-    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
-    if (wndrOverlay.hasClass('hidden')) {
-       wndrOverlay.removeClass('hidden');
-    } else {
-      wndrOverlay.addClass('hidden');
+  $scope.newWndr = function() {
+   var wndrOverlay = angular.element(document.getElementById('new_wndr'));
+   if (wndrOverlay.hasClass('hidden')) {
+      wndrOverlay.removeClass('hidden');
+   } else {
+     wndrOverlay.addClass('hidden');
+   }
+  };
+  
+  function addToFirebase(thoughtBubble) {
+    var newKey = firebase.database().ref().child('thoughts').push().key;
+    var updates = {};
+    updates['/thoughts/' + newKey] = thoughtBubble;
+    thoughtBubble.key = newKey;
+    firebase.database().ref().update(updates, function (err) {
+        if (err) {
+            alert('oh no! the database was not updated!');
+        }
+    });
+    return thoughtBubble;
     }
-   };
-   
-   $scope.getInput = function() {
+    
+  $scope.getInput = function() {
 
       document.activeElement.blur();
       if ($scope.iconName === "") {
@@ -596,10 +609,8 @@ angular
         $scope.thought = "";
         
         var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
-        $scope.map.panTo(LatLng);
-        $scope.currentPosition.setPosition(LatLng);
-        
-        addMarker(latlng,
+                
+        addMarker(LatLng,
               mapIcon(thoughtBubble.icon),
               $scope.map,
               google.maps.Animation.DROP,
@@ -607,6 +618,8 @@ angular
         
         var wndrOverlay = angular.element(document.getElementById('new_wndr'));
         wndrOverlay.addClass('hidden');
+        
+        $scope.currentPosition.setPosition(LatLng);
       });
     };
 });
