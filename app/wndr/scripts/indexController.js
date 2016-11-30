@@ -22,26 +22,16 @@ angular
             return icons.sad;
           case 'tongueOut' :
             return icons.tongueOut;
-          case 'happyTears' :
-            return icons.happyTears;
           case 'thinking' :
             return icons.thinking;
-          case 'smiling':
-            return icons.smiling;
           case 'grinning':
               return icons.grinning;
           case 'poop' :
               return icons.poop;
-          case 'upside_down':
-              return icons.upside_down;
-          case 'OMG':
-              return icons.OMG;
-          case 'unamused':
-              return icons.unamused;
           case 'red_flag':
               return icons.red_flag;
           default:
-              return icons.upside_down;
+              return icons.grinning;
         }
      };
 
@@ -553,13 +543,6 @@ angular
     $scope.iconName = icon;
   };
   
-  $scope.autoExpand = function(e) {
-    
-      var element = typeof e === 'object' ? e.target : document.getElementById(e);
-      var scrollHeight = element.scrollHeight;
-      element.style.height =  scrollHeight + "px";
-   };
-   
   $scope.newWndr = function() {
    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
    if (wndrOverlay.hasClass('hidden')) {
