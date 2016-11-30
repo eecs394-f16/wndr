@@ -46,9 +46,9 @@ wndr.constant('icons', {
         origin: new google.maps.Point(0, 0), // origin
         anchor: new google.maps.Point(0, 0) // anchor
     },
-    red_flag: {
-        url: "/emojis/Red_Flag_Emoji.png",
-        scaledSize: new google.maps.Size(30, 30),
+    pin: {
+        url: "/emojis/pin.png",
+        scaledSize: new google.maps.Size(30, 50),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(0, 0)
     }

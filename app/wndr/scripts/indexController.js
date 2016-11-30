@@ -28,8 +28,8 @@ angular
               return icons.grinning;
           case 'poop' :
               return icons.poop;
-          case 'red_flag':
-              return icons.red_flag;
+          case 'pin':
+              return icons.pin;
           default:
               return icons.grinning;
         }
@@ -145,7 +145,7 @@ angular
 
         $scope.currentPosition = new google.maps.Marker({
                         position: latlng,
-                        icon: icons.red_flag,
+                        icon: icons.pin,
                         map: map,
                         animation: google.maps.Animation.DROP
                         }).addListener('click', function () {
