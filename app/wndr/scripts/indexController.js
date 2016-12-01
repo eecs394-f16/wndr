@@ -2,7 +2,8 @@ angular
   .module('wndr')
   .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
 
-    $scope.markers = [];
+    var markers = [];
+    $scope.markerKeys = [];
     $scope.currentPosition = undefined;
     $scope.commentInput = "";
     $scope.likeCount = 0;
@@ -11,6 +12,12 @@ angular
     $scope.thought = "";
     steroids.tabBar.hide();
 
+    $scope.refreshMarkers = function() {
+      alert('refreshed');
+      $scope.markerKeys = [];
+      markers = [];
+      $scope.initMap();
+    };
      var mapIcon = function (iconName) {
 
         switch (iconName) {
@@ -412,19 +419,21 @@ angular
   }
   function addMarker(latlng, icon, map , animation, key) {
 
-      var result = new google.maps.Marker({
-                      position: latlng,
-                      icon: icon,
-                      map: map,
-                      animation: animation
-                      }).addListener('click', function () {
-                        closeAll();
-                        $scope.commentInput = "";
-                        $scope.updateMarker(key, map, latlng, this);
-                      });
-      result.key = key;
+      var result = {};
+      var marker = new google.maps.Marker({
+                          position: latlng,
+                          icon: icon,
+                          map: map,
+                          animation: animation
+                          }).addListener('click', function () {
+                            closeAll();
+                            $scope.commentInput = "";
+                            $scope.updateMarker(key, map, latlng, this);
+                          });
+      markers.push(marker);
       result.position = latlng;
-      $scope.markers.push(result);
+      result.key = key;
+      $scope.markerKeys.push(result);
       return result;
   }
 
@@ -471,7 +480,7 @@ angular
     while (listBox.firstChild) {
       listBox.removeChild(listBox.firstChild);
     }
-    var markers = $scope.markers;
+    var markers = $scope.markerKeys;
     var key;
     var keys = [];
     var promises = [];
