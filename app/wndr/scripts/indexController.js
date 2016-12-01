@@ -163,8 +163,6 @@ angular
         $scope.overlay.setMap($scope.map);
         $scope.map.addListener('click', function() {
           closeAll();
-          document.getElementById("floating-button-list").className = "";
-          document.getElementById("floating-button-map").className = "hidden";
         });
         google.maps.event.addListener(infoWindow, 'domready', function() {
 
@@ -569,23 +567,24 @@ angular
   
   $scope.updateCharWndr = function() {
   
-  var characters = $scope.thought.length;
-  //this function is just for developers to easily exit the post wndr page
-  if ($scope.thought === 'Naybro' || $scope.thought === 'naybro' ) {
-    document.activeElement.blur();
-    $scope.newWndr();
-    $scope.thought = "";
-    return;
-  }
-  //var words = this.value.split(' ').length;
-  document.getElementById('charactersWndr').innerHTML = 200 - characters;
-  //document.getElementById('words').value = words;
+    var characters = $scope.thought.length;
+    //this function is just for developers to easily exit the post wndr page
+    if ($scope.thought === 'Naybro' || $scope.thought === 'naybro' ) {
+      document.activeElement.blur();
+      $scope.newWndr();
+      $scope.thought = "";
+      return;
+    }
+    //var words = this.value.split(' ').length;
+    document.getElementById('charactersWndr').innerHTML = 200 - characters;
+    //document.getElementById('words').value = words;
   };
   
   $scope.stopPost = function() {
     document.activeElement.blur();
     $scope.newWndr();
     $scope.thought = "";
+    document.getElementById('charactersWndr').innerHTML = 200;
     return;
   };
   
