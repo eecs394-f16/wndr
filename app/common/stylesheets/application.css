@@ -278,3 +278,17 @@
   border-width: 1px;
   border-style: solid;
 }
+
+.cancelButton {
+  margin-top: 10px;
+  width: 100%;
+  background-color: rgb(194, 196, 198);
+  height: auto;
+  border: none;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 30px;
+  font-family: "Lato", sans-serif;
+  text-align: center;
+}

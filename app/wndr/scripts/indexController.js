@@ -581,7 +581,14 @@ angular
   document.getElementById('charactersWndr').innerHTML = 200 - characters;
   //document.getElementById('words').value = words;
   };
-    
+  
+  $scope.stopPost = function() {
+    document.activeElement.blur();
+    $scope.newWndr();
+    $scope.thought = "";
+    return;
+  };
+  
   $scope.setIcon = function($event, icon) {
     
     if ($scope.selected !== undefined ) {
