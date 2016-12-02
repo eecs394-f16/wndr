@@ -2,8 +2,11 @@ angular
   .module('wndr')
   .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
 
+  //markers keep track of all markers created
     var markers = [];
+    // markerKeys stores all the keys of wndr created
     $scope.markerKeys = [];
+    //currentPosition stores the marker for the user location
     $scope.currentPosition = undefined;
     $scope.commentInput = "";
     $scope.likeCount = 0;
@@ -12,12 +15,16 @@ angular
     $scope.thought = "";
     steroids.tabBar.hide();
 
+    //refreshes markers on screen to update according to data base by reinitializing a new map
     $scope.refreshMarkers = function() {
-      alert('refreshed');
       $scope.markerKeys = [];
       markers = [];
       $scope.initMap();
     };
+    
+    //maps icon to icon object
+    //var String
+    //Returns object
      var mapIcon = function (iconName) {
 
         switch (iconName) {
@@ -42,6 +49,7 @@ angular
         }
      };
 
+     //style navigation bar button
       listButton = new supersonic.ui.NavigationBarButton( {
         styleClass: 'listNavButton',
         styleId: 'toggleButton',
@@ -59,6 +67,7 @@ angular
         }
       }).then(supersonic.ui.navigationBar.show());
       
+      //toggles map view and change nav bar button
       $scope.toggleMapView = function () {
         listButton = new supersonic.ui.NavigationBarButton( {
         styleClass: 'listNavButton',
@@ -76,6 +85,7 @@ angular
           });
       };
       
+      //toggles list view and change nav bar button
       $scope.toggleListView = function () {
         listButton = new supersonic.ui.NavigationBarButton( {
         styleClass: 'mapNavButton',
@@ -92,6 +102,7 @@ angular
           $scope.listView();
         });
       };
+    
     //view initialization
     var init = function () {
         supersonic.device.geolocation.getPosition().then( function(position){
@@ -227,6 +238,8 @@ angular
     };
     google.maps.event.addDomListener(window, 'load', init);
 
+    //shows comment from database
+    //var string key
     function showComments(key){
       var ref = "/thoughts/" + key +"/comments/";
        firebase.database().ref(ref).once('value').then(function (snapshot) {
@@ -242,6 +255,8 @@ angular
         });
     }
 
+    //receive and process comment submitted
+    var string key
     $scope.submitComment = function (key){
       if ($scope.commentInput === ""){
         return;
@@ -255,6 +270,8 @@ angular
       $scope.commentInput = "";
     };
 
+    //post comment submitted
+    //var string inputText, string key
     function postComment(inputText, key) {
       var input = {
         text: inputText,
@@ -276,6 +293,8 @@ angular
       }
     }
 
+    //toggle like/ unlike function to keep track of like counts and updating the database
+    //var string key
     $scope.addLike = function (key) {
 
       var iconId = "likeIcon"+ key;
@@ -327,6 +346,7 @@ angular
       firebase.database().ref().update(updates);
   };
 
+  //closes the detail box of a wndr
   $scope.closeWndr = function () {
     var listBox = document.getElementById("detail-panel");
     while (listBox.firstChild) {
@@ -335,6 +355,8 @@ angular
     angular.element(listBox).addClass("hidden");
   };
 
+  //opens the detail box of a wndr
+  //var string key
   $scope.detailWndr = function (key) {
 
     closeAll();
@@ -410,6 +432,11 @@ angular
     });
   };
 
+  //generate html string representing the like button
+  //var bool liked
+  //var int likes
+  //var string key, string likerKey
+  //returns string
   function getLikeHTML (liked, likes, key, likerKey) {
 
     if (liked) {
@@ -417,6 +444,14 @@ angular
     }
     return '<div class="iconButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
   }
+  
+  //adds a marker on the map from a wndr
+  //var LatLng latlng
+  //var object icon
+  //var google.maps map
+  //var google.maps.animation animation
+  //var string key
+  //returns object result
   function addMarker(latlng, icon, map , animation, key) {
 
       var result = {};
@@ -437,6 +472,11 @@ angular
       return result;
   }
 
+  //updates a marker on the map with wndr contents on database
+  //var string key
+  //var google.maps map
+  //var LatLng latlng
+  //var google.maps.Marker marker
   $scope.updateMarker= function (key, map, latlng, marker) {
 
     firebase.database().ref('/thoughts/'+key).once('value').then(function (snapshot) {
@@ -474,6 +514,7 @@ angular
             });
   };
 
+  //toggles the list View
   $scope.listView = function() {
     closeAll();
     var listBox = document.getElementById('floating-panel');
@@ -497,6 +538,7 @@ angular
       });
   };
 
+  //updates list view with wndr contents from database
   function updateList(keys) {
 
     var listBox = document.getElementById('floating-panel');
@@ -543,10 +585,12 @@ angular
     });
   }
 
+  //toggles map view
   $scope.mapView = function() {
     closeAll();
   };
 
+  //update user position every 60 seconds using interval
   var updatePosition = function () {
       supersonic.device.geolocation.getPosition().then(function (position) {
           var LatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -555,6 +599,7 @@ angular
   };
   $interval(updatePosition, 60000);
 
+  //closes all detail boxes or list views generated and return to the default view
   function closeAll() {
     document.activeElement.blur();
     $scope.ib.close();
@@ -566,6 +611,7 @@ angular
     $scope.closeWndr();
   }
   
+  //update Character count of comment
   $scope.updateChar = function() {
     
     var characters = $scope.commentInput.length;
@@ -574,6 +620,7 @@ angular
     //document.getElementById('words').value = words;
     };
   
+  //update character count of new wndr
   $scope.updateCharWndr = function() {
   
     var characters = $scope.thought.length;
@@ -589,6 +636,7 @@ angular
     //document.getElementById('words').value = words;
   };
   
+  //cancels the posting of a wndr and returns to the default view
   $scope.stopPost = function() {
     document.activeElement.blur();
     $scope.newWndr();
@@ -597,6 +645,9 @@ angular
     return;
   };
   
+  //processes the icon selected in the new wndr view
+  //var $event
+  //var string icon
   $scope.setIcon = function($event, icon) {
     
     if ($scope.selected !== undefined ) {
@@ -607,6 +658,7 @@ angular
     $scope.iconName = icon;
   };
   
+  //creates view to create new wndr
   $scope.newWndr = function() {
    closeAll();
    $scope.toggleMapView();
@@ -618,6 +670,7 @@ angular
    }
   };
   
+  //post a new Wndr
   function addToFirebase(thoughtBubble) {
     var newKey = firebase.database().ref().child('thoughts').push().key;
     var updates = {};
@@ -631,6 +684,7 @@ angular
     return thoughtBubble;
     }
 
+    //process input from the new wndr view
    $scope.getInput = function() {
 
       document.activeElement.blur();
