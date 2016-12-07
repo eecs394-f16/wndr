@@ -43,8 +43,9 @@ To run the app:
 4. Scan the resulting QR code
 
 Description of code is described as comments in the code.
-....
+
 Tasks remaining:
-Include delete Wndr Function.
-Include Center map function for google maps api.
-Link up facebook api after app is released into store.
+
+- Include delete Wndr Function.
+- Include Center map function for google maps api.
+- Link up facebook api after app is released into store.
