@@ -256,7 +256,7 @@ angular
     }
 
     //receive and process comment submitted
-    var string key
+    //var string key
     $scope.submitComment = function (key){
       if ($scope.commentInput === ""){
         return;
@@ -395,10 +395,10 @@ angular
       });
       var wndrIcon = mapIcon(thought.icon);
       var contentString =
-      '<div id="content">'+
+      '<div class="content">'+
       '<img src="'+wndrIcon.url+'" class="avatar">'+
       '<span style="display : inline;">  '+thought.sender+'</span>'+
-      '<div id="info-thoughts">"'+thought.thought+
+      '<div class="info-thoughts">"'+thought.thought+
       '"</div>'+
       '<div><div style="width: 100%">' +
       getLikeHTML(liked, likes, key, likerKey) +
@@ -497,13 +497,15 @@ angular
                   comments = Object.keys(thought.comments).length;
               }
               var icon = mapIcon(thought.icon);
-              var likeHtml = getLikeHTML(liked, likes, snapshot.key, likerKey);
-              var contentString = '<div id="content" class="infoContent"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
+              var contentString = '<div class="infoContent content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
                                     thought.sender+'</span>'+
-                                    ' <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+
-                                    likeHtml+
-                                    '<div class="inline-right" ><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + snapshot.key + "'" + ')"></i><span>('+
-                                    '<div class="inline comments' + snapshot.key + '">' + comments+ '</div>)</span></div></div></div>';
+                                    ' <div class="info-thoughts">"'+thought.thought+'"</div>'+
+                                    '<div style="width: 100%">' +
+                                    getLikeHTML(liked, likes, key, likerKey) +
+                                    '<div style="float: right" class="iconButton">' +
+                                    '<i class="fa fa-comment-o" ng-click="detailWndr(' + "'" + snapshot.key + "'" + ')"></i>' +
+                                    '<span>(' + '<div class="inline comments'+snapshot.key+'">' + comments + '</div>)</span>' +
+                                    '</div></div></div>';
               var compiled = $compile(contentString)($scope);
               $scope.ib.setOptions({
                 content: compiled[0],
@@ -565,9 +567,9 @@ angular
           //var likeHtml = getLikeHTML(liked, likes, key, likerKey);
           //var HTML = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+thought.sender+'</span> <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+likeHtml+'<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline comments' + key + '">' + comments+ '</div>)</span></div></div>';
           var HTML =
-          '<div id="content"><div class="row" ng-click="detailWndr(' + "'" + key + "'" + ')">'+
+          '<div class="content"><div class="row" ng-click="detailWndr(' + "'" + key + "'" + ')">'+
           '<div class="col col-20"><img style="width: 100%;" src="'+icon.url+'">'+
-          '<div style="text-align: center;">'+thought.sender+'</div></div><div class="col col-80"> <div id="info-thoughts">"'+thought.thought+'"</div></div></div><div class="hr"></div>';
+          '<div style="text-align: center;">'+thought.sender+'</div></div><div class="col col-80"> <div class="info-thoughts">"'+thought.thought+'"</div></div></div><div class="hr"></div>';
           
           var compiledList = $compile(HTML)($scope);
           var promises2 = [];

@@ -163,7 +163,7 @@
   line-height: 30px;
  }
 
-#info-thoughts {
+.info-thoughts {
   font-size: 20px;
 }
 
@@ -172,7 +172,7 @@
   width: 10%;
 }
 
-#content {
+.content {
   padding-bottom: 10px;
   font-family: 'Roboto','sans-serif';
   line-height: 30px;
@@ -193,9 +193,7 @@
   z-index: 5;
   background-color: #fff;
   padding: 15px;
-  border: 1px solid #999;
   text-align: left;
-  font-family: 'Roboto','sans-serif';
   line-height: 30px;
   overflow-y: scroll;
   border-radius: 5px;

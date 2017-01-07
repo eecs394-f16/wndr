@@ -21,7 +21,7 @@ angular
                 // Handle Errors here.
                 //var errorCode = error.code;
                 var errorMessage = error.message;
-                supersonic.logger.log(errorMessage);
+                supersonic.logger.debug(errorMessage);
                 // The email of the user's account used.
                 //var email = error.email;
                 // The firebase.auth.AuthCredential type that was used.
