@@ -403,7 +403,7 @@ angular
       '<div><div style="width: 100%">' +
       getLikeHTML(liked, likes, key, likerKey) +
       '<div style="float: right" class="iconButton">' +
-      '<i class="fa fa-comment" ng-click="closeWndr()"></i>' +
+      getCommentIconHTML(comments, "closeWndr()")+
       '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span>' +
       '</div></div>' +
       '<form novalidate style="width: 100%;" ng-submit="submitComment(' + "'" + key + "'" + ')">' +
@@ -443,6 +443,15 @@ angular
       return '<div class="iconButton"><i id="likeIcon'+key+'" data="'+likerKey+'" class="fa fa-heart likeIcon'+key+'" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
     }
     return '<div class="iconButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
+  }
+  
+  function getCommentIconHTML (comments, callback) {
+    
+    if (comments === 0 ) {
+      return '<i class="fa fa-comment-o" ng-click="'+callback+'"></i>';
+    } else {
+      return '<i class="fa fa-comment" ng-click="'+callback+'"></i>';
+    }
   }
   
   //adds a marker on the map from a wndr
@@ -497,13 +506,14 @@ angular
                   comments = Object.keys(thought.comments).length;
               }
               var icon = mapIcon(thought.icon);
+              var callback = 'detailWndr(' + "'" + snapshot.key + "'" + ')';
               var contentString = '<div class="infoContent content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
                                     thought.sender+'</span>'+
                                     ' <div class="info-thoughts">"'+thought.thought+'"</div>'+
                                     '<div style="width: 100%">' +
                                     getLikeHTML(liked, likes, key, likerKey) +
                                     '<div style="float: right" class="iconButton">' +
-                                    '<i class="fa fa-comment-o" ng-click="detailWndr(' + "'" + snapshot.key + "'" + ')"></i>' +
+                                    getCommentIconHTML(comments, callback) +
                                     '<span>(' + '<div class="inline comments'+snapshot.key+'">' + comments + '</div>)</span>' +
                                     '</div></div></div>';
               var compiled = $compile(contentString)($scope);
