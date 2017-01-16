@@ -507,12 +507,13 @@ angular
               }
               var icon = mapIcon(thought.icon);
               var callback = 'detailWndr(' + "'" + snapshot.key + "'" + ')';
-              var contentString = '<div class="infoContent content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
-                                    thought.sender+'</span>'+
-                                    ' <div class="info-thoughts">"'+thought.thought+'"</div>'+
+              var contentString = '<div class="infoContent content">'+
+                                  '<div class="header" ng-click="'+callback+'"><img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
+                                    thought.sender+'</span></div>'+
+                                    ' <div class="info-thoughts" ng-click="'+callback+'">"'+thought.thought+'"</div>'+
                                     '<div style="width: 100%">' +
                                     getLikeHTML(liked, likes, key, likerKey) +
-                                    '<div style="float: right; display: inline" class="iconButton">' +
+                                    '<div style="float: right; display: inline" class="iconButton" ng-click="'+callback+'">' +
                                     getCommentIconHTML(comments, callback) +
                                     '<span>(' + '<div class="inline comments'+snapshot.key+'">' + comments + '</div>)</span>' +
                                     '</div></div></div>';
