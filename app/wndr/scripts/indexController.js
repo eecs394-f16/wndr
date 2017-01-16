@@ -402,7 +402,7 @@ angular
       '"</div>'+
       '<div><div style="width: 100%">' +
       getLikeHTML(liked, likes, key, likerKey) +
-      '<div style="float: right" class="iconButton">' +
+      '<div style="float: right; display: inline" class="iconButton">' +
       getCommentIconHTML(comments, "closeWndr()")+
       '<span>(' + '<div class="inline comments'+key+'">' + comments + '</div>)</span>' +
       '</div></div>' +
@@ -512,7 +512,7 @@ angular
                                     ' <div class="info-thoughts">"'+thought.thought+'"</div>'+
                                     '<div style="width: 100%">' +
                                     getLikeHTML(liked, likes, key, likerKey) +
-                                    '<div style="float: right" class="iconButton">' +
+                                    '<div style="float: right; display: inline" class="iconButton">' +
                                     getCommentIconHTML(comments, callback) +
                                     '<span>(' + '<div class="inline comments'+snapshot.key+'">' + comments + '</div>)</span>' +
                                     '</div></div></div>';
