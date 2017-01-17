@@ -2,7 +2,13 @@
 <div ng-controller="indexController"  ng-attr-location="wndr#index">
 	
     <div id="floating-panel" class="hidden"></div>
-    <div id="detail-panel" class="hidden"></div>    
+    <div id="detail-panel" class="hidden"></div>
+	<div id="delete-panel" class="hidden">
+		<div id="delete-options">
+			<div id="deleteWndr"></div>
+			<div id="cancelDelete" ng-click="cancelDelete()">Cancel</div>
+		</div>
+	</div>
     <div id="map_canvas" style="width:100%;"></div>
 	<div id="new_wndr" class="hidden">
 		<div class="row row-center">

@@ -59,6 +59,7 @@ tab-bar-item#newThought {
 
 .listNavButton{
   margin: 10px;
+  border: solid;
   background-image: url(img/listView.png);
 }
 

@@ -480,7 +480,37 @@ angular
       $scope.markerKeys.push(result);
       return result;
   }
+  
+  function getDeleteOption(canDelete, key) {
+    if (canDelete) {
+      return '<div style="display: inline; float: right;" ng-click="deleteWndr('+"'"+key+"'"+')"><i class="fa fa-ellipsis-h"></i></div>';
+    }
+    return '';
+  }
+  
+  $scope.deleteWndr = function(key) {
+    var deletePanel = angular.element(document.getElementById('delete-panel'));
+    deletePanel.removeClass('hidden');
+    var contentString = '<div ng-click="removeFromFirebase ('+"'"+key+"'"+')">Delete Wndr</div>';
+    var compiled = $compile(contentString)($scope);
+    var deleteButton = document.getElementById('deleteWndr');
+    angular.forEach (compiled, function(compiledEl) {
+        deleteButton.appendChild(compiledEl);
+    });
+  };
 
+  $scope.cancelDelete = function() {
+    var deletePanel = angular.element(document.getElementById('delete-panel'));
+    deletePanel.addClass('hidden');
+    document.getElementById('deleteWndr').innerHTML = '';
+  };
+  
+  $scope.removeFromFirebase = function(key) {
+    
+    firebase.database().ref('/thoughts/'+key).remove();
+    $scope.refreshMarkers();
+    $scope.cancelDelete();
+  };
   //updates a marker on the map with wndr contents on database
   //var string key
   //var google.maps map
@@ -491,7 +521,7 @@ angular
     firebase.database().ref('/thoughts/'+key).once('value').then(function (snapshot) {
 
               var thought = snapshot.val();
-              var liked = false;
+              var liked, canDelete = false;
               var likerKey;
               angular.forEach(thought.likers, function(liker,key) {
                 if (liker.uid === localStorage.getItem('userId')) {
@@ -505,11 +535,14 @@ angular
               if (thought.comments) {
                   comments = Object.keys(thought.comments).length;
               }
+              if (thought.userId == localStorage.getItem('userId')) {
+                canDelete = true;
+              }
               var icon = mapIcon(thought.icon);
               var callback = 'detailWndr(' + "'" + snapshot.key + "'" + ')';
               var contentString = '<div class="infoContent content">'+
-                                  '<div class="header" ng-click="'+callback+'"><img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+
-                                    thought.sender+'</span></div>'+
+                                  '<div class="header"><img src="'+icon.url+'" class="avatar" ng-click="'+callback+'"> <span style="display : inline;" ng-click="'+callback+'">  '+
+                                    thought.sender+'</span>'+getDeleteOption(canDelete, snapshot.key)+'</div>'+
                                     ' <div class="info-thoughts" ng-click="'+callback+'">"'+thought.thought+'"</div>'+
                                     '<div style="width: 100%">' +
                                     getLikeHTML(liked, likes, key, likerKey) +
