@@ -1,8 +1,15 @@
 angular
   .module('wndr')
   .controller('loginController', function ($scope, supersonic) {
-      var provider = new firebase.auth.FacebookAuthProvider();
 
+      var view = new supersonic.ui.View("wndr#signup");
+
+      $scope.loadsignupview = function () {
+          var fadeAnimation = supersonic.ui.animate("fade");
+          supersonic.ui.layers.push(view, { animation: fadeAnimation });   
+      }
+
+      var provider = new firebase.auth.FacebookAuthProvider();
       $scope.FBLogin = function () {
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {

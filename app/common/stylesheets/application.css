@@ -1,8 +1,4 @@
-.img-full-bck{
-  width: 100%;
-}
-
-.login-page__title {
+.login-page__title, .signup-page__title {
   font-family: 'Lato', sans-serif;
   font-size: 35vw;
   color: white;
@@ -10,7 +6,7 @@
   text-align: center;
   padding-top: 15vw;
 }
-.login-page__input {
+.login-page__input, .signup-page__input {
   font-family: 'Lato', sans-serif;
   width: 70vw;
   margin-bottom: 2vw;
@@ -35,7 +31,7 @@
   height: 3vw;
   transform: scale(1.5);
 }
-.login-page__button {
+.login-page__button, .signup-page__button {
   font-family: 'Lato', sans-serif;
   width: 70vw;
   margin-bottom: 2vw;
@@ -46,13 +42,17 @@
   font-size: 8vw;
   color: #ffffff;
 }
-.login-page__signup {
+.login-page__signup, .signup-page__login {
   font-family: 'Lato', sans-serif;
   width: 70vw;
   margin-bottom: 2vw;
   text-align: center;
   margin-left: 15vw;
   font-size: 4vw;
+}
+
+.img-full-bck{
+  width: 100%;
 }
 
 .supersonic-navbar-mock {

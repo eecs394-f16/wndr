@@ -22,7 +22,8 @@ module.exports =
     }
   ]
   preloads: [
-    
+    {
+    }
   ]
 
   # drawers:
@@ -33,6 +34,3 @@ module.exports =
   #   options:
   #     animation: "swingingDoor"
   #
-  # initialView:
-  #   id: "initialView"
-  #   location: "example#initial-view"
