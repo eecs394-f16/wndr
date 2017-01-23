@@ -34,8 +34,8 @@ angular
             return icons.angry;
           case'sad' :
             return icons.sad;
-          case 'tongueOut' :
-            return icons.tongueOut;
+          case 'laughingWithTears' :
+            return icons.laughingWithTears;
           case 'thinking' :
             return icons.thinking;
           case 'grinning':
