@@ -1,11 +1,16 @@
 <div class="signup-page" style="height: 100vh; background-color: #81d6d5; text-align: center" ng-controller="signupController">
+    <div id="delete-panel" class='hidden'></div>
     <div class="signup-page__title">wndr</div>
     <div style="margin-top: 25vw;">
-        <input class="signup-page__input" placeholder="Email" type="email" maxlength="30"/>
-        <input class="signup-page__input" placeholder="Full Name" maxlength="30"/>
-        <input class="signup-page__input" placeholder="Username" maxlength="15"/>
-        <input class="signup-page__input" placeholder="Password" type="password" maxlength="15"/>
-        <button class="signup-page__button" >Sign Up</button>
+        <input class="signup-page__input" ng-model="email" placeholder="Email" type="email" maxlength="30"/>
+        <input class="signup-page__input" ng-model="name" placeholder="Full Name" maxlength="30"/>
+        <input class="signup-page__input" ng-model="username" placeholder="Username" maxlength="15"/>
+        <input class="signup-page__input" ng-model="password" placeholder="Password" type="password" maxlength="15"/>
+        <button class="signup-page__button" ng-click="signUp()">Sign Up</button>
         <div class="signup-page__login">Have an account? <span style="color: #ffffff; font-size: 5vw;" ng-click="closesignupview()">Log in</span></div>
-    </div>    
+    </div>
+    <div id="errorMessage" class="hidden">
+        <div id="errorContent">The password is too weak. Your password needs at least 6 letters.</div>
+        <div class="closeMsg" ng-click="closeAlert()">ok</div>
+    </div>
 </div>

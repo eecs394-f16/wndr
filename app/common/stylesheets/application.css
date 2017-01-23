@@ -374,3 +374,34 @@
   color: rgb(0, 118, 255);
   padding: 20px;
 }
+
+#errorMessage {
+  position: absolute;
+  top: 40%;
+  bottom: 35%;
+  left: 12.5%;
+  right: 12.5%;
+  width: 75%;
+  border-radius: 35px;
+  border:solid rgb(234, 234, 236);
+  border-width: 1px;
+  background-color: rgb(255,255,255);
+  z-index: 15;
+}
+
+#errorContent {
+  font-family: "Lato";
+  text-align: center;
+  font-size: 20px;
+  padding: 10%;
+  border-bottom: 3px solid rgb(234, 234, 236);
+}
+
+.closeMsg {
+  color: rgb(0, 118, 255);
+  font-family: "Lato";
+  text-align: center;
+  font-size: 20px;
+  padding: 10px;
+  height: 20%;
+}

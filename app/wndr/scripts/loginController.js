@@ -7,7 +7,7 @@ angular
       $scope.loadsignupview = function () {
           var fadeAnimation = supersonic.ui.animate("fade");
           supersonic.ui.layers.push(view, { animation: fadeAnimation });   
-      }
+      };
 
       var provider = new firebase.auth.FacebookAuthProvider();
       $scope.FBLogin = function () {
