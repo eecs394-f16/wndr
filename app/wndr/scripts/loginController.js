@@ -15,9 +15,8 @@ angular
           var password = document.getElementById('LoginPassword').value;
           supersonic.logger.debug('here');
           firebase.auth().signInWithEmailAndPassword(email,password).then(function (result) {
-          var user = result.user;
-          localStorage.setItem('email', user.email);
-          localStorage.setItem('userId', user.uid);
+          localStorage.setItem('email', result.email);
+          localStorage.setItem('userId', result.uid);
           supersonic.ui.initialView.dismiss();
           }).catch(function (error) {
             var errorMessage = error.message;
