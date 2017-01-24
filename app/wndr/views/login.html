@@ -1,15 +1,15 @@
 <div class="login-page" style="height: 100vh; background-color: #81d6d5; text-align: center;" ng-controller="loginController">
     <div class="login-page__title">wndr</div>
     <div style="margin-top: 25vw;">
-        <input class="login-page__input" placeholder="Username" />
-        <input class="login-page__input" placeholder="Password" type="password"/>
+        <input class="login-page__input" placeholder="Email" id="LoginEmail"/>
+        <input class="login-page__input" placeholder="Password" type="password" id="LoginPassword"/>
         <div class="login-page__rmbme">
             <span style="padding: 0 2vw 0 1vw;">Remember me</span>
-            <input class="login-page__checkbox" type="checkbox" />
+            <input class="login-page__checkbox" type="checkbox" id="RememberMe" />
         </div>
         <button class="login-page__button" ng-click="FBLogin()">Log in</button>
         <div class="login-page__signup">Don't have an account?
             <span ng-click="loadsignupview()" style="color: #ffffff; font-size: 5vw;">Sign up</span>
         </div>
-    </div>    
+    </div>
 </div>
