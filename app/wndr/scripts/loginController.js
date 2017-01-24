@@ -6,37 +6,35 @@ angular
 
       $scope.loadsignupview = function () {
           var fadeAnimation = supersonic.ui.animate("fade");
-          supersonic.ui.layers.push(view, { animation: fadeAnimation });   
+          supersonic.ui.layers.push(view, { animation: fadeAnimation });
       };
 
-      var provider = new firebase.auth.FacebookAuthProvider();
-      $scope.FBLogin = function () {
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-              localStorage.setItem('username', user.displayName.split(" ")[0]);
-              localStorage.setItem('userId', user.uid); 
-            } else {
-                firebase.auth().signInWithPopup(provider).then(function (result) {
-                // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-                //var token = result.credential.accessToken;
-                // The signed-in user info.
-                var user = result.user;
-                // ...
-                localStorage.setItem('username', user.displayName.split(" ")[0]);
-                localStorage.setItem('userId', user.uid);    
-                }).catch(function (error) {
-                // Handle Errors here.
-                //var errorCode = error.code;
-                var errorMessage = error.message;
-                supersonic.logger.debug(errorMessage);
-                // The email of the user's account used.
-                //var email = error.email;
-                // The firebase.auth.AuthCredential type that was used.
-                //var credential = error.credential;
-                // ...
-                });
-            }
-        });
+
+        $scope.FBLogin = function () {
+          var email = document.getElementById('LoginEmail').value;
+          var password = document.getElementById('LoginPassword').value;
+          supersonic.logger.debug('here');
+          firebase.auth().signInWithEmailAndPassword(email,password).then(function (result) {
+          var user = result.user;
+          localStorage.setItem('email', user.email);
+          localStorage.setItem('userId', user.uid);
+          supersonic.ui.initialView.dismiss();
+          }).catch(function (error) {
+            var errorMessage = error.message;
+            alert(errorMessage);
+          });
+        };/*
+        localStorage.setItem('email',email);
+        if(document.getElementById("RememberMe").checked){
+          localStorage.setItem('RememberMe','True');
+          localStorage.setItem('password',password);
+        }
+        else{
+          localStorage.removeItem('RememberMe');
+          supersonic.ui.dialog.alert("Please select an Icon!"+email+password);
+        }
+
+
         supersonic.ui.initialView.dismiss();
-      };
+      }; */
   });
