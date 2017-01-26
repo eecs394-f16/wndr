@@ -20,7 +20,7 @@ angular
       supersonic.ui.initialView.dismiss();
       }).catch(function (error) {
         var errorMessage = error.message;
-        alert(errorMessage);
+        errorMsg(errorMessage);
       });
     };
         
