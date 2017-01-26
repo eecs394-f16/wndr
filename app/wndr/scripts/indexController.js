@@ -19,6 +19,7 @@ angular
     $scope.refreshMarkers = function() {
       $scope.markerKeys = [];
       markers = [];
+      closeAll();
       $scope.initMap();
     };
     
@@ -285,6 +286,7 @@ angular
           if (err) {
               alert('oh no! the database was not updated!');
           }
+          $scope.detailWndr(key);
       });
       var commentId = 'comments' + key;
       var commentEls = document.getElementsByClassName(commentId);
