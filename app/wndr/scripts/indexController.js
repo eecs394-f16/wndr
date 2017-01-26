@@ -386,6 +386,7 @@ angular
           comments = Object.keys(thought.comments).length;
       }
       var liked = false;
+      var canDelete = false;
       var likerKey;
       angular.forEach(thought.likers, function(liker,key) {
         if (liker.uid === localStorage.getItem('userId')) {
@@ -393,11 +394,14 @@ angular
          likerKey = key;
         }
       });
+      if (thought.userId == localStorage.getItem('userId')) {
+        canDelete = true;
+      }
       var wndrIcon = mapIcon(thought.icon);
       var contentString =
-      '<div class="content">'+
+      '<div class="infoContent content"><div class="header">'+
       '<img src="'+wndrIcon.url+'" class="avatar">'+
-      '<span style="display : inline;">  '+thought.sender+'</span>'+
+      '<span style="display : inline;">  '+thought.sender+'</span>'+getDeleteOption(canDelete, snapshot.key)+'</div>'+
       '<div class="info-thoughts">"'+thought.thought+
       '"</div>'+
       '<div><div style="width: 100%">' +
@@ -510,6 +514,7 @@ angular
     firebase.database().ref('/thoughts/'+key).remove();
     $scope.refreshMarkers();
     $scope.cancelDelete();
+    closeAll();
   };
   //updates a marker on the map with wndr contents on database
   //var string key
@@ -608,8 +613,6 @@ angular
               comments = Object.keys(thought.comments).length;
           }
           var icon = mapIcon(thought.icon);
-          //var likeHtml = getLikeHTML(liked, likes, key, likerKey);
-          //var HTML = '<div id="content"> <img src="'+icon.url+'" class="avatar"> <span style="display : inline;">  '+thought.sender+'</span> <div id="info-thoughts">"'+thought.thought+'"</div> <div>'+likeHtml+'<br><i class=" fa fa-comment-o" style="font-size: 15px; padding: 10px; margin : 5px;" ng-click="detailWndr(' + "'" + key + "'" + ')"></i><span>(' + '<div class="inline comments' + key + '">' + comments+ '</div>)</span></div></div>';
           var HTML =
           '<div class="content"><div class="row" ng-click="detailWndr(' + "'" + key + "'" + ')">'+
           '<div class="col col-20"><img style="width: 100%;" src="'+icon.url+'">'+

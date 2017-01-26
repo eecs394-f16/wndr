@@ -37,6 +37,7 @@ angular
             return;
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
+                
             // Handle Errors here.
             signUpError = true;
             var errorCode = error.code;
@@ -46,10 +47,20 @@ angular
             } else {
               errorMsg(errorMessage);
             }
-            }).then(function() {
+            }).then(function(user) {
                 if (signUpError === false) {
-                    errorMsg("You have successfully signed up!");
-                    $scope.closesignupview();
+                    
+                    supersonic.data.channel('alert').publish('Congratulations! You have successfully signed up!');
+                    user.updateProfile({
+                        displayName: username,
+                        fullName: name,
+                    }).then(function() {
+                        // Update successful.
+                        $scope.closesignupview();
+                      }, function(error) {
+                        // An error happened.
+                        errorMsg(error.message);
+                      });
                 }
             });
         }

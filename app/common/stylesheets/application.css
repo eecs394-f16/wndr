@@ -378,7 +378,6 @@
 #errorMessage {
   position: absolute;
   top: 40%;
-  bottom: 35%;
   left: 12.5%;
   right: 12.5%;
   width: 75%;
@@ -403,5 +402,5 @@
   text-align: center;
   font-size: 20px;
   padding: 10px;
-  height: 20%;
+  min-height: 50px;
 }
