@@ -1,3 +1,15 @@
+.navbar {
+  font-family: 'Lato', sans-serif;
+  width: 100vw;
+  height: 11vw;
+  padding-top: 4vw;
+  padding-left: 2vw;
+  //text-align: center;
+}
+.navbar img {
+  float: left;
+}
+
 .login-page__title, .signup-page__title {
   font-family: 'Lato', sans-serif;
   font-size: 35vw;

@@ -1,7 +1,9 @@
-
-<div ng-controller="indexController"  ng-attr-location="wndr#index">
-	
-    <div id="floating-panel" class="hidden"></div>
+<div ng-controller="indexController" style="height:100%;" ng-attr-location="wndr#index">
+    <div id="navbar" class="navbar">
+        <img style="height: 5vw; width: auto;" ng-click="inMapView ? listView() : mapView()" id="navbar__icon" src="/img/listView.png" />
+        <div style="height: auto; font-size: 10vw; float: right; margin-right: 38%;">wndr</div>
+    </div>
+    <div id="floating-panel" style="margin-top:11vw; width: 100%;" ng-style="{height: viewHeight + 'px'}" class="hidden"></div>
     <div id="detail-panel" class="hidden"></div>
 	<div id="delete-panel" class="hidden">
 		<div id="delete-options">
@@ -9,8 +11,8 @@
 			<div id="cancelDelete" ng-click="cancelDelete()">Cancel</div>
 		</div>
 	</div>
-    <div id="map_canvas" style="width:100%;"></div>
-	<div id="new_wndr" class="hidden">
+    <div id="map_canvas" style="width:100%;" ng-style="{height: viewHeight + 'px'}"></div>
+	<div id="new_wndr" style="margin-top:11vw;" class="hidden">
 		<div class="row row-center">
 			<div class="col col-offset-10 col-80">
 			  <form novalidate ng-submit="getInput()">
@@ -29,7 +31,7 @@
 				</textarea>
                 <div class="charCountContainer">
                     <div class="charCount">
-                        <div id="charactersWndr">200</div> <div> characters left</div>
+                        <div id="charactersWndr">200</div><div> characters left</div>
                     </div>
                 </div>
 				<br />

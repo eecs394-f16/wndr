@@ -2,6 +2,9 @@ angular
   .module('wndr')
   .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
 
+      $scope.inMapView = true;
+      $scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight - 20;
+
   //markers keep track of all markers created
     var markers = [];
     // markerKeys stores all the keys of wndr created
@@ -49,75 +52,19 @@ angular
               return icons.grinning;
         }
      };
-
-     //style navigation bar button
-      listButton = new supersonic.ui.NavigationBarButton( {
-        styleClass: 'listNavButton',
-        styleId: 'toggleButton',
-        title: ' ',
-        onTap: function() {
-          $scope.toggleListView();
-        }
-      });
-        
-      supersonic.ui.navigationBar.update({
-        title: "wndr",
-        overrideBackButton: true,
-        buttons: {
-          left: [listButton]
-        }
-      }).then(supersonic.ui.navigationBar.show());
-      
-      //toggles map view and change nav bar button
-      $scope.toggleMapView = function () {
-        listButton = new supersonic.ui.NavigationBarButton( {
-        styleClass: 'listNavButton',
-        title: ' ',
-        onTap: function() {
-          $scope.toggleListView();
-        }
-        });
-        supersonic.ui.navigationBar.update({
-          buttons: {
-            left: [listButton]
-          }
-        }).then(function () {
-            $scope.mapView();
-          });
-      };
-      
-      //toggles list view and change nav bar button
-      $scope.toggleListView = function () {
-        listButton = new supersonic.ui.NavigationBarButton( {
-        styleClass: 'mapNavButton',
-        title: ' ',
-        onTap: function() {
-          $scope.toggleMapView();
-        }
-        });
-        supersonic.ui.navigationBar.update({
-        buttons: {
-          left: [listButton]
-        }
-        }).then(function() {
-          $scope.listView();
-        });
-      };
     
     //view initialization
     var init = function () {
         supersonic.device.geolocation.getPosition().then( function(position){
-        $scope.position = position;
-        $scope.initMap();
-      });
+            $scope.position = position;
+            $scope.initMap();
+        });
     };
 
     //Map initialization
     $scope.initMap = function() {
-
         var infoWindow = new google.maps.InfoWindow();
         $scope.ib = infoWindow;
-        document.getElementById('map_canvas').style.height = window.innerHeight + "px";
         var latlng = new google.maps.LatLng($scope.position.coords.latitude, $scope.position.coords.longitude);
 
         var myOptions = {
@@ -125,7 +72,8 @@ angular
             mapTypeControl: false,
             clickableIcons: false,
             zoom: 18,
-            center: latlng
+            center: latlng,
+            gestureHandling: 'greedy'
         };
 
         var styledMapType = new google.maps.StyledMapType(
@@ -569,7 +517,9 @@ angular
 
   //toggles the list View
   $scope.listView = function() {
-    closeAll();
+      closeAll();
+      document.getElementById("navbar__icon").src = "/img/mapView.png";
+      $scope.inMapView = false;
     var listBox = document.getElementById('floating-panel');
     while (listBox.firstChild) {
       listBox.removeChild(listBox.firstChild);
@@ -638,7 +588,9 @@ angular
 
   //toggles map view
   $scope.mapView = function() {
-    closeAll();
+      closeAll();
+      document.getElementById("navbar__icon").src = "/img/listView.png";
+      $scope.inMapView = true;
   };
 
   //update user position every 60 seconds using interval
@@ -710,9 +662,9 @@ angular
   };
   
   //creates view to create new wndr
-  $scope.newWndr = function() {
-   closeAll();
-   $scope.toggleMapView();
+  $scope.newWndr = function () {
+      closeAll();
+      $scope.mapView();
    var wndrOverlay = angular.element(document.getElementById('new_wndr'));
    if (wndrOverlay.hasClass('hidden')) {
       wndrOverlay.removeClass('hidden');
