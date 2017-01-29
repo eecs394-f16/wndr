@@ -1,9 +1,8 @@
 angular
   .module('wndr')
   .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
-
+      $scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight;
       $scope.inMapView = true;
-      $scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight - 20;
 
   //markers keep track of all markers created
     var markers = [];

@@ -8,11 +8,10 @@ angular
       };
 
       function errorMsg(errorString) {
-        
-        var errorDiv = document.getElementById('errorContent');
-        errorDiv.innerHTML= errorString;
-        document.getElementById('errorMessage').className = '';
-        document.getElementById('delete-panel').className='';
+          var errorDiv = document.getElementById('errorContent');
+          errorDiv.innerHTML = errorString;
+          document.getElementById('errorMessage').className = '';
+          document.getElementById('delete-panel').className = '';
       }
       
       $scope.closeAlert = function() {
