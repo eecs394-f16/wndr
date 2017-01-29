@@ -1,7 +1,7 @@
 <div ng-controller="indexController" style="height:100%;" ng-attr-location="wndr#index">
-    <div id="navbar" class="navbar">
-        <img style="height: 5vw; width: auto;" ng-click="inMapView ? listView() : mapView()" id="navbar__icon" src="/img/listView.png" />
-        <div style="height: auto; font-size: 10vw; float: right; margin-right: 38%;">wndr</div>
+    <div id="navbar">
+        <img ng-click="inMapView ? listView() : mapView()" id="navbar__icon" src="/img/listView.png" />
+        <div ng-click="toggleMenu ? closeMenu() : openMenu()">wndr</div>
     </div>
     <div id="floating-panel" style="margin-top:11vw; width: 100%;" ng-style="{height: viewHeight + 'px'}" class="hidden"></div>
     <div id="detail-panel" class="hidden"></div>
@@ -43,6 +43,11 @@
 	</div>
 	<div class='new-wndr'><img class='new-wndr-button' id='background-img' src='/img/newWndr.png' ng-click="newWndr()"/></div>
 	<div class='refreshWndr'><img class='new-wndr-button' src='/img/refresh.png' ng-click="refreshMarkers()"/></div>
+    <div id="menu" class="hidden">
+        <div>About</div>
+        <div>Contact Us</div>
+        <div>Log Out</div>
+    </div>
 </div>
 <script>
 	document.ontouchmove = function(event){ 

@@ -1,13 +1,37 @@
-.navbar {
+#navbar {
   font-family: 'Lato', sans-serif;
   width: 100vw;
   height: 11vw;
   padding-top: 4vw;
   padding-left: 2vw;
-  //text-align: center;
 }
-.navbar img {
+#navbar img {
   float: left;
+  height: 5vw;
+  width: auto;
+}
+#navbar div {
+  height: auto;
+  font-size: 10vw;
+  float: right;
+  margin-right: 39%;
+}
+
+#menu {
+  font-family: 'Lato', sans-serif;
+  top: 11vw;
+  z-index: 6;
+  position: absolute;
+  background: rgba(255, 255, 255, 1);
+  width: 30%;
+  margin-left: 35%;
+  text-align: center;
+  border-radius: 5vw;
+  font-size: 4vw;
+}
+#menu div {
+  width: 100%;
+  padding: 2vw;
 }
 
 .login-page__title, .signup-page__title {

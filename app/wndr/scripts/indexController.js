@@ -3,6 +3,7 @@ angular
   .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
       $scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight;
       $scope.inMapView = true;
+      $scope.toggleMenu = false;
 
   //markers keep track of all markers created
     var markers = [];
@@ -309,18 +310,6 @@ angular
   $scope.detailWndr = function (key) {
 
     closeAll();
-    listButton = new supersonic.ui.NavigationBarButton( {
-        styleClass: 'listNavButton',
-        title: ' ',
-        onTap: function() {
-          $scope.toggleListView();
-        }
-        });
-    supersonic.ui.navigationBar.update({
-      buttons: {
-        left: [listButton]
-      }
-    });
     var ref = "/thoughts/" + key;
     var listBox = document.getElementById('detail-panel');
     listBox.className = "";
@@ -730,5 +719,17 @@ angular
         
         $scope.currentPosition.setPosition(LatLng);
       });
-    };
+   };
+
+   $scope.openMenu = function () {
+       var menu = document.getElementById('menu');
+       menu.className = "";
+       $scope.toggleMenu = true;
+   }
+
+   $scope.closeMenu = function () {
+       var menu = document.getElementById('menu');
+       menu.className = "hidden";
+       $scope.toggleMenu = false;
+   }
 });
