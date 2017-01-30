@@ -11,6 +11,7 @@ angular
       $scope.inMapView = true;
       $scope.toggleMenu = false;
       $scope.toggleAbout = false;
+      $scope.toggleContact = false;
 
   //markers keep track of all markers created
     var markers = [];
@@ -599,6 +600,7 @@ angular
 
   //closes all detail boxes or list views generated and return to the default view
   function closeAll() {
+      $scope.closeMenu();
     document.activeElement.blur();
     $scope.ib.close();
     var listBox = document.getElementById("floating-panel");
@@ -738,6 +740,8 @@ angular
        var menu = document.getElementById('menu');
        menu.className = "hidden";
        $scope.toggleMenu = false;
+       $scope.closeAbout();
+       $scope.closeContact();
    };
 
    supersonic.ui.views.current.whenVisible(function() {
@@ -773,15 +777,38 @@ angular
    };
 
    $scope.openAbout = function () {
+       $scope.closeContact();
        $scope.menuWidth = 80;
        $scope.menuMargin = 10;
        $scope.toggleAbout = true;
+       var about = document.getElementById('about-details');
+       about.style.visibility = "visible";
+       about.style.height = "auto";
    };
 
    $scope.closeAbout = function () {
        $scope.menuWidth = 30;
        $scope.menuMargin = 35;
        $scope.toggleAbout = false;
+       var about = document.getElementById('about-details');
+       about.style.visibility = "hidden";
+       about.style.height = "0";
    };
-
+   $scope.openContact = function () {
+       $scope.closeAbout();
+       $scope.menuWidth = 80;
+       $scope.menuMargin = 10;
+       $scope.toggleContact = true;
+       var contact = document.getElementById('contact-details');
+       contact.style.visibility = "visible";
+       contact.style.height = "auto";
+   }
+   $scope.closeContact = function () {
+       $scope.menuWidth = 30;
+       $scope.menuMargin = 35;
+       $scope.toggleContact = false;
+       var contact = document.getElementById('contact-details');
+       contact.style.visibility = "hidden";
+       contact.style.height = "0";
+   }
 });

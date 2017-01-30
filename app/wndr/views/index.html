@@ -44,13 +44,29 @@
 	</div>
 	<div class='new-wndr'><img class='new-wndr-button' id='background-img' src='/img/newWndr.png' ng-click="newWndr()"/></div>
 	<div class='refreshWndr'><img class='new-wndr-button' src='/img/refresh.png' ng-click="refreshMarkers()"/></div>
-    <div id="menu" ng-style="{width: menuWidth + 'vw', 'margin-left': menuMargin + 'vw'}"class="hidden">
-        <div ng-click="toggleAbout ? closeAbout() : openAbout()">About</div>
-        <div class="hidden">hello</div>
-        <div>Contact Us</div>
-        <div></div>
-        <div ng-click="logout()">Log Out</div>
-        <div></div>
+    <div id="menu" ng-style="{width: menuWidth + 'vw', 'margin-left': menuMargin + 'vw'}" class="hidden">
+        <div class="options" ng-click="toggleAbout ? closeAbout() : openAbout()">About</div>
+        <div id="about-details" class="details">
+            <p>wndr is a fun and interactive application that allows you to engage with your surroundings and interact with other wndrers (that was hard to say).</p>
+            <p>Using our map you can view wndrs stamped with an emoji, and also share your thoughts at your location. Join the wndr community to begin your location-based interaction.</p>
+            <br />
+            <ul>
+                Use wndr to:
+                <li>- See what others have thought anywhere on the map</li>
+                <li>- Share your thoughts in you current location</li>
+                <li>- Choose an emoji to stamp you post</li>
+                <li>- Interact with others by liking and commenting</li>
+            </ul>
+            <br />
+            <p>Thanks to <b>Snazzy Maps</b> for the Sevilla skin</p>
+            <p>Emoji provided free from <b>EmojiOne</b></p>
+            <p>Map marker courtesy of the <b>Noun Project</b> by Creative Stall</p>
+        </div>
+        <div class="options" ng-click="toggleContact ? closeContact() : openContact()">Contact Us</div>
+        <div id="contact-details" class="details">
+            <p>Please email us at wndrgroup@gmail.com with any questions or comments. We would love to hear from YOU!</p>
+        </div>
+        <div class="options" ng-click="logout()">Log Out</div>
     </div>
 </div>
 <script>
