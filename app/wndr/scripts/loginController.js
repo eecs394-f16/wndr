@@ -3,6 +3,7 @@ angular
   .controller('loginController', function ($scope, supersonic) {
 
       var signupView = new supersonic.ui.View("wndr#signup");
+      var indexView = new supersonic.ui.View("wndr#index");
       var fadeAnimation = supersonic.ui.animate("fade");
 
       $scope.loadsignupview = function () {
@@ -16,7 +17,7 @@ angular
               localStorage.setItem('email', result.email);
               localStorage.setItem('userId', result.uid);
               localStorage.setItem('username', result.displayName);
-              supersonic.ui.layers.replace("index");
+              supersonic.ui.layers.push(indexView, { animation: fadeAnimation });
           }).catch(function (error) {
               var errorMessage = error.message;
               errorMsg(errorMessage);

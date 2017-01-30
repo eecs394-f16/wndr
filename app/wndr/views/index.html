@@ -43,10 +43,13 @@
 	</div>
 	<div class='new-wndr'><img class='new-wndr-button' id='background-img' src='/img/newWndr.png' ng-click="newWndr()"/></div>
 	<div class='refreshWndr'><img class='new-wndr-button' src='/img/refresh.png' ng-click="refreshMarkers()"/></div>
-    <div id="menu" class="hidden">
-        <div>About</div>
+    <div id="menu" ng-style="{width: menuWidth + 'vw', 'margin-left': menuMargin + 'vw'}"class="hidden">
+        <div ng-click="toggleAbout ? closeAbout() : openAbout()">About</div>
+        <div class="hidden">hello</div>
         <div>Contact Us</div>
+        <div></div>
         <div>Log Out</div>
+        <div></div>
     </div>
 </div>
 <script>
