@@ -32,7 +32,7 @@ angular
       closeAll();
       $scope.initMap();
     };
-    
+
     //maps icon to icon object
     //var String
     //Returns object
@@ -59,7 +59,7 @@ angular
               return icons.grinning;
         }
      };
-    
+
     //view initialization
     var init = function () {
         supersonic.device.geolocation.getPosition().then( function(position){
@@ -393,16 +393,16 @@ angular
     }
     return '<div class="iconButton"><i id="likeIcon'+key+'"  data="'+likerKey+'"class="fa fa-heart-o likeIcon'+key+'" ng-click="addLike('+"'"+key+"'"+')"></i><span>('+'<div class="inline likes'+key+'" id="likes'+key+'">'+likes+'</div>)</span></div>';
   }
-  
+
   function getCommentIconHTML (comments, callback) {
-    
+
     if (comments === 0 ) {
       return '<i class="fa fa-comment-o" ng-click="'+callback+'"></i>';
     } else {
       return '<i class="fa fa-comment" ng-click="'+callback+'"></i>';
     }
   }
-  
+
   //adds a marker on the map from a wndr
   //var LatLng latlng
   //var object icon
@@ -429,14 +429,14 @@ angular
       $scope.markerKeys.push(result);
       return result;
   }
-  
+
   function getDeleteOption(canDelete, key) {
     if (canDelete) {
       return '<div style="display: inline; float: right;" ng-click="deleteWndr('+"'"+key+"'"+')"><i class="fa fa-ellipsis-h"></i></div>';
     }
     return '';
   }
-  
+
   $scope.deleteWndr = function(key) {
     var deletePanel = angular.element(document.getElementById('delete-panel'));
     deletePanel.removeClass('hidden');
@@ -453,9 +453,9 @@ angular
     deletePanel.addClass('hidden');
     document.getElementById('deleteWndr').innerHTML = '';
   };
-  
+
   $scope.removeFromFirebase = function(key) {
-    
+
     firebase.database().ref('/thoughts/'+key).remove();
     $scope.refreshMarkers();
     $scope.cancelDelete();
@@ -564,7 +564,7 @@ angular
           '<div class="content"><div class="row" ng-click="detailWndr(' + "'" + key + "'" + ')">'+
           '<div class="col col-20"><img style="width: 100%;" src="'+icon.url+'">'+
           '<div style="text-align: center;">'+thought.sender+'</div></div><div class="col col-80"> <div class="info-thoughts">"'+thought.thought+'"</div></div></div><div class="hr"></div>';
-          
+
           var compiledList = $compile(HTML)($scope);
           var promises2 = [];
           angular.forEach (compiledList, function(compiledEl) {
@@ -608,19 +608,19 @@ angular
     listBox.className = "hidden";
     $scope.closeWndr();
   }
-  
+
   //update Character count of comment
   $scope.updateChar = function() {
-    
+
     var characters = $scope.commentInput.length;
     //var words = this.value.split(' ').length;
     document.getElementById('characters').innerHTML = 200 - characters;
     //document.getElementById('words').value = words;
     };
-  
+
   //update character count of new wndr
   $scope.updateCharWndr = function() {
-  
+
     var characters = $scope.thought.length;
     //this function is just for developers to easily exit the post wndr page
     if ($scope.thought === 'Naybro' || $scope.thought === 'naybro' ) {
@@ -633,7 +633,7 @@ angular
     document.getElementById('charactersWndr').innerHTML = 200 - characters;
     //document.getElementById('words').value = words;
   };
-  
+
   //cancels the posting of a wndr and returns to the default view
   $scope.stopPost = function() {
     document.activeElement.blur();
@@ -642,12 +642,12 @@ angular
     document.getElementById('charactersWndr').innerHTML = 200;
     return;
   };
-  
+
   //processes the icon selected in the new wndr view
   //var $event
   //var string icon
   $scope.setIcon = function($event, icon) {
-    
+
     if ($scope.selected !== undefined ) {
       $scope.selected.removeClass('selected');
     }
@@ -655,7 +655,7 @@ angular
     $scope.selected = angular.element($event.currentTarget);
     $scope.iconName = icon;
   };
-  
+
   //creates view to create new wndr
   $scope.newWndr = function () {
       closeAll();
@@ -667,7 +667,7 @@ angular
      wndrOverlay.addClass('hidden');
    }
   };
-  
+
   //post a new Wndr
   function addToFirebase(thoughtBubble) {
     var newKey = firebase.database().ref().child('thoughts').push().key;
@@ -713,7 +713,7 @@ angular
         $scope.thought = "";
 
         var LatLng = new google.maps.LatLng (position.coords.latitude, position.coords.longitude);
-              
+
         addMarker(LatLng,
                   mapIcon(thoughtBubble.icon),
                   $scope.map,
@@ -723,7 +723,7 @@ angular
 
         var wndrOverlay = angular.element(document.getElementById('new_wndr'));
         wndrOverlay.addClass('hidden');
-        
+
         $scope.currentPosition.setPosition(LatLng);
       });
    };
@@ -739,16 +739,16 @@ angular
        menu.className = "hidden";
        $scope.toggleMenu = false;
    };
-   
+
    supersonic.ui.views.current.whenVisible(function() {
         supersonic.device.geolocation.getPosition().then( function(position){
             $scope.position = position;
             $scope.initMap();
         });
        });
-   
+
    $scope.logout = function() {
-    
+
     var options = {
         buttonLabels: ["Cancel", "Logout"]
       };
@@ -757,7 +757,16 @@ angular
             $scope.closeMenu();
             //logout
             firebase.auth().signOut().then(function() {
+
                  supersonic.ui.layers.replace('login');
+                 if(localStorage.getItem('rememberMe') !== 'true'){
+                   localStorage.removeItem('email');
+                   localStorage.removeItem('userId');
+                   localStorage.removeItem('username');
+                   localStorage.removeItem('password');
+                   localStorage.removeItem('rememberMe');
+                 }
+
               });
         }
       });
@@ -768,7 +777,7 @@ angular
        $scope.menuMargin = 10;
        $scope.toggleAbout = true;
    };
-   
+
    $scope.closeAbout = function () {
        $scope.menuWidth = 30;
        $scope.menuMargin = 35;

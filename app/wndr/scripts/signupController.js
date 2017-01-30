@@ -13,11 +13,11 @@ angular
         var options = {
             buttonLabel: "Ok"
           };
-          
+
           supersonic.ui.dialog.alert(errorString, options).then(function() {
           });
     }
-      
+
       $scope.signUp = function() {
         var username = $scope.username;
         var name = $scope.name;
@@ -32,7 +32,7 @@ angular
             return;
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, password).catch(function(error) {
-                
+
             // Handle Errors here.
             signUpError = true;
             var errorCode = error.code;
@@ -44,13 +44,16 @@ angular
             }
             }).then(function(user) {
                 if (signUpError === false) {
-                    
+
                     supersonic.data.channel('alert').publish('Congratulations! You have successfully signed up!');
                     user.updateProfile({
                         displayName: username,
                         fullName: name,
                     }).then(function() {
                         // Update successful.
+                        localStorage.setItem('email', email);
+                        localStorage.setItem('password', password);
+                        localStorage.setItem('rememberMe', 'true');
                         $scope.closesignupview();
                       }, function(error) {
                         // An error happened.
