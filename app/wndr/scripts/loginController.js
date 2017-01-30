@@ -1,12 +1,13 @@
 angular
   .module('wndr')
   .controller('loginController', function ($scope, supersonic) {
+    supersonic.ui.navigationBar.hide();
 
       var signupView = new supersonic.ui.View("wndr#signup");
       var fadeAnimation = supersonic.ui.animate("fade");
 
       $scope.loadsignupview = function () {
-          supersonic.ui.layers.push(signupView, { animation: fadeAnimation });
+          supersonic.ui.layers.push(signupView, { animation: fadeAnimation});
       };
 
       $scope.FBLogin = function () {
@@ -25,19 +26,13 @@ angular
         
         
     function errorMsg(errorString) {
-      var errorDiv = document.getElementById('errorContent');
-      errorDiv.innerHTML= errorString;
-      document.getElementById('errorMessage').className = '';
-      document.getElementById('delete-panel').className='';
+        var options = {
+            buttonLabel: "Ok"
+          };
+          
+          supersonic.ui.dialog.alert(errorString, options).then(function() {
+          });
     }
-      
-    $scope.closeAlert = function() {
-      
-      var errorDiv = document.getElementById('errorMessage');
-      document.getElementById('errorContent').innerHTML= '';
-      errorDiv.className = 'hidden';
-      document.getElementById('delete-panel').className='hidden';
-    };
       
     supersonic.data.channel('alert').subscribe( function(message) {
         errorMsg(message);

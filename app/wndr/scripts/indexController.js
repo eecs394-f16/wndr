@@ -1,6 +1,7 @@
 angular
   .module('wndr')
   .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
+    supersonic.ui.navigationBar.hide();
       $scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight;
       $scope.inMapView = true;
       $scope.toggleMenu = false;
@@ -725,11 +726,34 @@ angular
        var menu = document.getElementById('menu');
        menu.className = "";
        $scope.toggleMenu = true;
-   }
+   };
 
    $scope.closeMenu = function () {
        var menu = document.getElementById('menu');
        menu.className = "hidden";
        $scope.toggleMenu = false;
-   }
+   };
+   
+   supersonic.ui.views.current.whenVisible(function() {
+        supersonic.device.geolocation.getPosition().then( function(position){
+            $scope.position = position;
+            $scope.initMap();
+        });
+       });
+   
+   $scope.logout = function() {
+    
+    var options = {
+        buttonLabels: ["Cancel", "Logout"]
+      };
+    supersonic.ui.dialog.confirm("Log out of wndr?", options).then(function(index) {
+        if (index === 1) {
+            $scope.closeMenu();
+            //logout
+            firebase.auth().signOut().then(function() {
+                 supersonic.ui.layers.replace('login');
+              });
+        }
+      });
+   };
 });

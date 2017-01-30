@@ -5,10 +5,11 @@
     </div>
     <div id="floating-panel" style="margin-top:11vw; width: 100%;" ng-style="{height: viewHeight + 'px'}" class="hidden"></div>
     <div id="detail-panel" class="hidden"></div>
+	<div id="mask" class="hidden"></div>
 	<div id="delete-panel" class="hidden">
 		<div id="delete-options">
 			<div id="deleteWndr"></div>
-			<div id="cancelDelete" ng-click="cancelDelete()">Cancel</div>
+			<div class="cancelDelete" ng-click="cancelDelete()">Cancel</div>
 		</div>
 	</div>
     <div id="map_canvas" style="width:100%;" ng-style="{height: viewHeight + 'px'}"></div>
@@ -46,7 +47,7 @@
     <div id="menu" class="hidden">
         <div>About</div>
         <div>Contact Us</div>
-        <div>Log Out</div>
+        <div ng-click="logout()">Log Out</div>
     </div>
 </div>
 <script>

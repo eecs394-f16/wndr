@@ -18,6 +18,10 @@ module.exports =
       id: "index"
       location: "wndr#index"
     }
+    {
+      id: 'login'
+      location: "wndr#login"
+    }
   ]
 
   # drawers:

@@ -1,26 +1,22 @@
 angular
   .module('wndr')
   .controller('signupController', function ($scope, supersonic) {
-      supersonic.ui.navigationBar.hide();
+       supersonic.ui.views.current.whenVisible(function() {
+        supersonic.ui.navigationBar.hide();
+       });
 
       $scope.closesignupview = function () {
           supersonic.ui.layers.pop();
       };
 
       function errorMsg(errorString) {
-          var errorDiv = document.getElementById('errorContent');
-          errorDiv.innerHTML = errorString;
-          document.getElementById('errorMessage').className = '';
-          document.getElementById('delete-panel').className = '';
-      }
-      
-      $scope.closeAlert = function() {
-        
-        var errorDiv = document.getElementById('errorMessage');
-        document.getElementById('errorContent').innerHTML= '';
-        errorDiv.className = 'hidden';
-        document.getElementById('delete-panel').className='hidden';
-      };
+        var options = {
+            buttonLabel: "Ok"
+          };
+          
+          supersonic.ui.dialog.alert(errorString, options).then(function() {
+          });
+    }
       
       $scope.signUp = function() {
         var username = $scope.username;
