@@ -1,10 +1,16 @@
 angular
   .module('wndr')
   .controller('indexController', function (icons, $interval, $scope, supersonic, $compile, $window, $q) {
-    supersonic.ui.navigationBar.hide();
-      $scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight;
+
+      supersonic.ui.navigationBar.hide();
+
+      //$scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight;
+      $scope.viewHeight = window.innerHeight;
+      $scope.menuWidth = 30;
+      $scope.menuMargin = 35;
       $scope.inMapView = true;
       $scope.toggleMenu = false;
+      $scope.toggleAbout = false;
 
   //markers keep track of all markers created
     var markers = [];
@@ -756,4 +762,17 @@ angular
         }
       });
    };
+
+   $scope.openAbout = function () {
+       $scope.menuWidth = 80;
+       $scope.menuMargin = 10;
+       $scope.toggleAbout = true;
+   };
+   
+   $scope.closeAbout = function () {
+       $scope.menuWidth = 30;
+       $scope.menuMargin = 35;
+       $scope.toggleAbout = false;
+   };
+
 });

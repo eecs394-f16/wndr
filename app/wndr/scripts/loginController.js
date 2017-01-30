@@ -17,7 +17,7 @@ angular
               localStorage.setItem('email', result.email);
               localStorage.setItem('userId', result.uid);
               localStorage.setItem('username', result.displayName);
-              supersonic.ui.layers.replace("index");
+              supersonic.ui.layers.replace('index');
           }).catch(function (error) {
               var errorMessage = error.message;
               errorMsg(errorMessage);
