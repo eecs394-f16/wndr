@@ -747,7 +747,7 @@ angular
    supersonic.ui.views.current.whenVisible(function() {
         supersonic.device.geolocation.getPosition().then( function(position){
             $scope.position = position;
-            $scope.initMap();
+            $scope.refreshMarkers();
         });
        });
 
