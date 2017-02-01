@@ -743,14 +743,14 @@ angular
        $scope.closeAbout();
        $scope.closeContact();
    };
-
+/*
    supersonic.ui.views.current.whenVisible(function() {
         supersonic.device.geolocation.getPosition().then( function(position){
             $scope.position = position;
             $scope.refreshMarkers();
         });
        });
-
+*/
    $scope.logout = function() {
 
     var options = {
