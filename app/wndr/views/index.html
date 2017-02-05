@@ -1,18 +1,17 @@
-<div ng-controller="indexController" style="height:100%;" ng-attr-location="wndr#index">
-    <div id="navbar">
+<div ng-controller="indexController" style="" ng-attr-location="wndr#index">
+    <div id="navbar" >
         <img ng-click="inMapView ? listView() : mapView()" id="navbar__icon" src="/img/listView.png" />
         <div ng-click="toggleMenu ? closeMenu() : openMenu()">wndr</div>
     </div>
-    <div id="floating-panel" style="margin-top:11vw; width: 100%;" ng-style="{height: viewHeight + 'px'}" class="hidden"></div>
-    <div id="detail-panel" class="hidden"></div>
-	<div id="mask" class="hidden"></div>
+    <div id="floating-panel" ng-style="{height: viewHeight + 'px'}" class="hidden"></div>
+    <div id="detail-panel" ng-style="{height: viewHeight + 'px'}" class="hidden"></div>
 	<div id="delete-panel" class="hidden">
 		<div id="delete-options">
 			<div id="deleteWndr"></div>
 			<div class="cancelDelete" ng-click="cancelDelete()">Cancel</div>
 		</div>
 	</div>
-    <div id="map_canvas" style="width:100%;" ng-style="{height: viewHeight + 'px'}"></div>
+    <div id="map_canvas"></div>
 	<div id="new_wndr" style="margin-top:11vw;" class="hidden">
 		<div class="row row-center">
 			<div class="col col-offset-10 col-80">
@@ -42,8 +41,8 @@
 			</div>
 		</div>
 	</div>
-	<div class='new-wndr'><img class='new-wndr-button' id='background-img' src='/img/newWndr.png' ng-click="newWndr()"/></div>
-	<div class='refreshWndr'><img class='new-wndr-button' src='/img/refresh.png' ng-click="refreshMarkers()"/></div>
+    <div class='new-wndr'><img class='new-wndr-button' id='background-img' src='/img/newWndr.png' ng-click="newWndr()" /></div>
+    <div class='refreshWndr'><img class='new-wndr-button' src='/img/refresh.png' ng-click="refreshMarkers()" /></div>
     <div id="menu" ng-style="{width: menuWidth + 'vw', 'margin-left': menuMargin + 'vw'}" class="hidden">
         <div class="options" ng-click="toggleAbout ? closeAbout() : openAbout()">About</div>
         <div id="about-details" class="details">

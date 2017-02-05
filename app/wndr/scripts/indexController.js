@@ -4,8 +4,6 @@ angular
 
       supersonic.ui.navigationBar.hide();
 
-      //$scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight;
-      $scope.viewHeight = window.innerHeight;
       $scope.menuWidth = 30;
       $scope.menuMargin = 35;
       $scope.inMapView = true;
@@ -516,6 +514,7 @@ angular
       closeAll();
       document.getElementById("navbar__icon").src = "/img/mapView.png";
       $scope.inMapView = false;
+      $scope.viewHeight = window.innerHeight - document.getElementById('navbar').offsetHeight;
     var listBox = document.getElementById('floating-panel');
     while (listBox.firstChild) {
       listBox.removeChild(listBox.firstChild);
