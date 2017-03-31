@@ -66,11 +66,11 @@
   font-family: 'Lato', sans-serif;
   width: 70vw;
   margin-bottom: 2vw;
-  padding: 1vw;
+  padding: 3vw;
   background-color: #ffffff;
   border: 0px;
   border-radius: 0px;
-  font-size: 6vw;
+  font-size: 5vw;
 }
 .login-page__rmbme {
   font-family: 'Lato', sans-serif;
@@ -95,7 +95,7 @@
   background-color: #3e99ed;
   border: 0px;
   border-radius: 0px;
-  font-size: 8vw;
+  font-size: 5vw;
   color: #ffffff;
 }
 .login-page__signup, .signup-page__login {
