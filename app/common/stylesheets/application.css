@@ -35,6 +35,7 @@
   position: absolute;
   background: rgba(255, 255, 255, 1);
   border-radius: 5vw;
+  overflow: hidden;
 }
 #menu .options {
   text-align: center;
@@ -49,6 +50,7 @@
   width: 100%;
   padding: 0 1vw;
   line-height: 1.1;
+  z-index: 9;
 }
 #menu p {
   margin: 0;
@@ -271,16 +273,14 @@
   top: 15%;
   left: 10%;
   right: 10%;
-  bottom: 13%;
   width: 80%;
-  height: 72%;
   z-index: 5;
   background-color: #fff;
   padding: 15px;
   text-align: left;
   line-height: 30px;
-  overflow-y: scroll;
   border-radius: 5px;
+  overflow: auto;
  }
  
  .inline {

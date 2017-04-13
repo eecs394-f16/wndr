@@ -360,7 +360,7 @@ angular
       '</form>' +
       '<div class="charCountContainer"><div class="charCount">' +
       '<div id="characters">200</div><div> characters left</div>' +
-      '</div></div></div>' +
+      '</div></div>' +
       '<div id="comments' + key + '" class="comments"></div>' +
       '</div>';
 
